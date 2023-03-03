@@ -86,7 +86,7 @@
   </NuxtLink>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
   .lobby-list-item {
     width: 100%;
     display: flex;
@@ -97,67 +97,66 @@
     padding: 20px 50px;
     margin-bottom: 20px;
     cursor: default;
-  }
-  .board-title-container {
-    width: 50%;
-  }
-  .board-title-container .board-info {
-    display: flex;
-    align-items: center;
-    font-size: 1.2rem;
-  }
-  .board-title-container .board-info > * {
-    margin-right: 15px;
-  }
-  .board-title-container .board-info span.date {
-    font-size: .8rem;
-    opacity: 0.7;
-    text-decoration: underline;
-  }
-  .board-title-container h3.title-text {
-    margin: 10px 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .board-title-container .tags-container {
-    display: flex;
-  }
-  .board-title-container .tags-container .tag {
-    padding: 2px 10px;
-    margin-right: 10px;
-    border: 2px solid var(--theme-black);
-    border-radius: 5px;
-    font-size: .95rem;
-    cursor: pointer;
-  }
-  
-  .keywords {
-    height: 120px;
-    width: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .keywords .keyword {
-    display: flex;
-    align-items: center;
-  }
-  .keywords .keyword span {
-    width: 70px;
-    text-align: center;
-  }
-  .keywords .keyword .keyword-bar {
-    width: 150px;
-    height: 25px;
-    background-color: var(--theme-black);
-    margin-left: 15px;
-    color: white;
-    font-size: .75rem;
-    text-align: right;
-    line-height: 25px;
-    padding-right: 10px;
+    .board-title-container {
+      width: 50%;
+      .board-info {
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+        > * {
+          margin-right: 15px;
+        }
+        span.date {
+          font-size: .8rem;
+          opacity: 0.7;
+          text-decoration: underline;
+        }
+      }
+      h3.title-text {
+        margin: 10px 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .tags-container {
+        display: flex;
+        .tag {
+          padding: 2px 10px;
+          margin-right: 10px;
+          border: 2px solid var(--theme-black);
+          border-radius: 5px;
+          font-size: .95rem;
+          cursor: pointer;
+        }
+      }
+    }
+    .keywords {
+      height: 120px;
+      width: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .keyword {
+        display: flex;
+        align-items: center;
+        span {
+          width: 70px;
+          text-align: center;
+        }
+        .keyword-bar {
+          width: 150px;
+          height: 25px;
+          background-color: var(--theme-black);
+          margin-left: 15px;
+          color: white;
+          font-size: .75rem;
+          text-align: right;
+          line-height: 25px;
+          padding-right: 10px;
+        }
+      }
+    }
   }
 </style>

@@ -69,7 +69,6 @@
       </ul>
     </div>
     <div class="user-controls">
-      
       <div class="like-container" @click="isUserLike = !isUserLike">
         <img src="/like-true.png" height="24" alt="" v-show="isUserLike">
         <img src="/like-false.png" height="24" alt="" v-show="!isUserLike">
@@ -84,74 +83,75 @@
   </div>
 </template>
 
-<style scoped>
-  img {
-    cursor: pointer;
-  }
+<style scoped lang="scss">
   .board-infos-container{
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-  }
-  .board-infos-container > * {
-    margin-bottom: 15px;
-  }
-  h5.date {
-    font-size: .8rem;
-    opacity: 0.7;
-    text-decoration: underline;
-  }
-  h1 {
-    font-size: 2.5rem;
-  }
-  ul.tags {
-    display: flex;
-  }
-  ul.tags li.tag {
-    padding: 2px 10px;
-    margin-right: 10px;
-    border: 2px solid var(--theme-black);
-    border-radius: 5px;
-    font-size: .95rem;
-    cursor: pointer;
-  }
-  .links-container .link-title {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-  }
-  .links-container .link-title span {
-    margin-right: 15px;
-  }
-  .links-container ul.links {
-    padding-left: 15px;
-    margin-left: 3px;
-    border-left: 2px dotted var(--theme-black);
-  }
-  .links-container ul.links li {
-    margin: 5px 0;
-    letter-spacing: 0.5px;
-  }
-  .links-container ul.links li span {
-    margin-right: 10px;
-  }
-  .user-controls {
-    display: flex;
-    align-items: center;
-  }
-  .user-controls > * {
-    margin-right: 15px;
-  }
-  .user-controls .like-container, 
-  .user-controls .collect-container {
-    display: flex;
-    align-items: center;
-    user-select: none;
-  }
-  .user-controls .like-container img {
-    margin-top: 3px;
-    margin-right: 7px;
+    img {
+      cursor: pointer;
+    }
+    > * {
+      margin-bottom: 15px;
+    }
+    h5.date {
+      font-size: .8rem;
+      opacity: 0.7;
+      text-decoration: underline;
+    }
+    h1 {
+      font-size: 2.5rem;
+    }
+    ul.tags {
+      display: flex;
+      li.tag {
+        padding: 2px 10px;
+        margin-right: 10px;
+        border: 2px solid var(--theme-black);
+        border-radius: 5px;
+        font-size: .95rem;
+        cursor: pointer;
+      }
+    }
+    .links-container {
+      .link-title {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+        span {
+          margin-right: 15px;
+        }
+      }
+      ul.links {
+        padding-left: 15px;
+        margin-left: 3px;
+        border-left: 2px dotted var(--theme-black);
+        li {
+          margin: 5px 0;
+          letter-spacing: 0.5px;
+          span {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+    .user-controls {
+      display: flex;
+      align-items: center;
+      > * {
+        margin-right: 15px;
+      }
+      .like-container, .collect-container {
+        display: flex;
+        align-items: center;
+        user-select: none;
+      }
+      .like-container img {
+        margin-top: 3px;
+        margin-right: 7px;
+      }
+    }
   }
 </style>

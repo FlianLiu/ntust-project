@@ -91,81 +91,81 @@
   </div>
 </template>
 
-<style scoped>
-  .container > * {
-    width: 100%;
+<style scoped lang="scss">
+  .container {
+    > div {
+      width: 100%;
+      h3 {
+        font-size: 1.25rem;
+        letter-spacing: 0.5px;
+      }
+      .button {
+        width: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 5px 15px;
+        border: 3px solid var(--theme-black);
+        border-radius: 5px;
+        cursor: pointer;
+        user-select: none;
+        &.active {
+          background-color: var(--theme-black);
+          color: var(--theme-white);
+        }
+        &.active h4 {
+          font-weight: normal;
+        }
+      }
+    }
+    .petition-container {
+      width: 100%;
+      display: flex;
+      .spacing {
+        width: 60px;
+      }
+      .icon {
+        width: 50px;
+        text-align: center;
+      }
+    }
+    .launch-petition {
+      width: 100%;
+      > div {
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .launch-title {
+        margin: 20px;
+        h3 {
+          margin-right: 50px;
+        }
+      }
+      .launch-container {
+        border: 3px solid var(--theme-black);
+        border-radius: 7px;
+        padding: 10px;
+        padding-left: 20px;
+        justify-content: space-between;
+        input {
+          line-height: 1.25rem;
+          font-size: 1rem;
+          padding: 5px;
+          border: none;
+          border-bottom: 3px solid var(--theme-black);
+          background-color: var(--theme-white);
+          &:focus {
+            outline: none;
+          }
+          &.title {
+            width: 300px;
+          }
+          &.launch-reason {
+            width: 600px;
+          }
+        }
+      }
+    }
   }
-  h3 {
-    font-size: 1.25rem;
-    letter-spacing: 0.5px;
-  }
-  .icon {
-    width: 50px;
-    text-align: center;
-  }
-  .button {
-    width: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 5px 15px;
-    border: 3px solid var(--theme-black);
-    border-radius: 5px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .button.active {
-    background-color: var(--theme-black);
-    color: var(--theme-white);
-  }
-  .button.active h4 {
-    font-weight: normal;
-  }
-  .petition-container {
-    width: 100%;
-    display: flex;
-  }
-  .spacing {
-    width: 60px;
-  }
-
-  .launch-petition {
-    width: 100%;
-  }
-  .launch-petition > div {
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-  .launch-petition .launch-title {
-    margin: 20px;
-  }
-  .launch-petition .launch-title h3 {
-    margin-right: 50px;
-  }
-  .launch-petition .launch-container {
-    border: 3px solid var(--theme-black);
-    border-radius: 7px;
-    padding: 10px;
-    padding-left: 20px;
-    justify-content: space-between;
-  }
-  .launch-petition .launch-container input {
-    line-height: 1.25rem;
-    font-size: 1rem;
-    padding: 5px;
-    border: none;
-    border-bottom: 3px solid var(--theme-black);
-    background-color: var(--theme-white);
-  }
-  .launch-petition .launch-container input:focus {
-    outline: none;
-  }
-  .launch-petition .launch-container input.title {
-    width: 300px;
-  }
-  .launch-petition .launch-container input.launch-reason {
-    width: 600px;
-  }
-
 </style>

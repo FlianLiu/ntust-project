@@ -100,112 +100,114 @@
   </div>
 </template>
 
-<style scoped>
-  h3 {
-    font-size: 1.25rem;
-    letter-spacing: 0.5px;
-    display: inline-block;
-  }
-  .button {
-    width: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 5px 15px;
-    border: 3px solid var(--theme-black);
-    border-radius: 5px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .button.active {
-    background-color: var(--theme-black);
-    color: var(--theme-white);
-  }
-  .button.active > *{
-    font-weight: normal;
-  }
+<style scoped lang="scss">
   .petitioning-container {
     width: 50%;
-  }
-  .petitioning-container .petitioning-boards.border::before {
-    content: '';
-    display: flex;
-    height: 100%;
-    width: calc(100% - 30px);
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: 3px solid var(--theme-black);
-    border-radius: 5px;
-  }
-  .petitioning-container .petitioning-boards ul {
-    height: 387px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    padding-right: 20px;
-  }
-  .petitioning-container .petitioning-boards.border ul {
-    height: 260px;
-    padding-left: 5px;
-  }
-  .petitioning-container .petitioning-boards.border li {
-    height: 60px;
-  }
-  .petitioning-container ul::-webkit-scrollbar {
-    border: 2px solid var(--theme-black);
-  }
-  .petitioning-container ul li {
-    margin-bottom: 0;
-  }
-  .petitioning-container ul li.border {
-    border-radius: 5px;
-    border: 3px solid var(--theme-black);
-    margin-bottom: 15px;
-  }
-  .petitioning-container ul li:last-child {
-    margin-bottom: 0;
-  }
-  .petitioning-container ul li > * {
-    width: 100%;
-  }
-  .petitioning-container ul li .signing-progress-bar {
-    height: 15px;
-    overflow: hidden;
-    border-bottom: 3px solid var(--theme-black);
-  }
-  .petitioning-container ul li .signing-progress-bar .signing-bar {
-    width: 75%;
-    height: 100%;
-    background-color: var(--theme-black);
-  }
-  .petitioning-container ul li .infos-container {
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 17.5px;
-    padding-left: 20px;
-  }
-  .petitioning-container ul li .infos-container.haveProgressBar {
-    height: 65px;
-    padding: 10px;
-    padding-left: 20px;
-  }
-  .petitioning-container ul li .infos-container .title {
-    max-width: 280px;
-    padding: 0px 20px;
-    display: -webkit-box;
-    -webkit-line-clamp: var(--max-line);
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-  }
-  .petitioning-container ul li .infos-container .title h3 {
-    color: red;
-  }
-  .petitioning-container > h3 {
-    margin: 20px;
+    .petitioning-boards {
+      &.border {
+        &::before {
+          content: '';
+          display: flex;
+          height: 100%;
+          width: calc(100% - 30px);
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: 3px solid var(--theme-black);
+          border-radius: 5px;
+        }
+        ul {
+          height: 260px;
+          padding-left: 5px;
+          li {
+            height: 60px;
+          }
+        }
+      }
+      ul {
+        height: 387px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+        padding-right: 20px;
+        &::-webkit-scrollbar {
+          border: 2px solid var(--theme-black);
+        }
+        li {
+          margin-bottom: 0;
+          &.border {
+            border-radius: 5px;
+            border: 3px solid var(--theme-black);
+            margin-bottom: 15px;
+          }
+          &:last-child {
+            margin-bottom: 0;
+          }
+          > * {
+            width: 100%;
+          }
+          .signing-progress-bar {
+            height: 15px;
+            overflow: hidden;
+            border-bottom: 3px solid var(--theme-black);
+            .signing-bar {
+              width: 75%;
+              height: 100%;
+              background-color: var(--theme-black);
+            }
+          }
+          .infos-container {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 17.5px;
+            padding-left: 20px;
+            &.haveProgressBar {
+              height: 65px;
+              padding: 10px;
+              padding-left: 20px;
+            }
+            .title {
+              max-width: 280px;
+              padding: 0px 20px;
+              display: -webkit-box;
+              -webkit-line-clamp: var(--max-line);
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              text-align: center;
+              h3 {
+                color: red;
+              }
+            }
+          }
+        }
+      }
+    }
+    h3 {
+      margin: 20px;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+      display: inline-block;
+    }
+    .button {
+      width: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 5px 15px;
+      border: 3px solid var(--theme-black);
+      border-radius: 5px;
+      cursor: pointer;
+      user-select: none;
+      &.active {
+        background-color: var(--theme-black);
+        color: var(--theme-white);
+        > * {
+          font-weight: normal;
+        }
+      }
+    }
   }
 </style>

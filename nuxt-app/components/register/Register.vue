@@ -89,7 +89,7 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
   .register-container {
     width: 100%;
     min-height: calc(100vh - 120px);
@@ -97,150 +97,144 @@
     align-items: center;
     justify-content: center;
     padding: 30px 0;
-  }
-  form {
-    border: 3px solid var(--theme-inactive);
-    border-radius: 7px;
-    padding: 20px 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-    transition: border .3s, transform .3s, box-shadow .3s;
-  }
-  form:hover {
-    border: 3px solid var(--theme-black);
-    transform: scale(1.02);
-    box-shadow: 0 10px 30px var(--shadow-black);
-  }
-  form div {
-    display: flex;
-    align-items: center;
-  }
-  form > * {
-    margin: 12.5px 0;
-  }
-  .carrot-container {
-    margin: 0;
-  }
-  .carrot-container .carrot {
-    margin: 0 3px;
-  }
-  .password-container > img {
-    position: absolute;
-    right: 15px;
-  }
-  .headshot-container {
-    width: 100%;
-    padding: 0 15px;
-    justify-content: center;
-    user-select: none;
-  }
-  .headshot-container h5 {
-    font-weight: normal;
-    position: absolute;
-    left: 15px;
-    bottom: 0;
-    opacity: .7;
-  }
-  .headshot-container h5::before {
-    content: '';
-    display: block;
-    height: 20px;
-    width: 20px;
-    background-image: url('/arrow-follow.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    transform: rotate(-70deg) scaleX(-1);
-    position: absolute;
-    right: -20px;
-    top: -15px;
-  }
-  input#name, input#name:invalid 
-    , input#email, input#email:invalid
-    , input.password, input.password:invalid
-    , input#verificate, input#verificate:invalid {
-    width: 350px;
-    line-height: 1.2rem;
-    padding: 10px 15px;
-    font-size: 1rem;
-    background-color: var(--theme-white);
-    border-radius: 7px;
+    form {
+      border: 3px solid var(--theme-inactive);
+      border-radius: 7px;
+      padding: 20px 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: border .3s, transform .3s, box-shadow .3s;
+      &:hover {
+        border: 3px solid var(--theme-black);
+        transform: scale(1.02);
+        box-shadow: 0 10px 30px var(--shadow-black);
+      }
+      div {
+        display: flex;
+        align-items: center;
+      }
+      > * {
+        margin: 12.5px 0;
+      }
+      .carrot-container {
+        margin: 0;
+        .carrot {
+          margin: 0 3px;
+        }
+      }
+      .headshot-container {
+        width: 100%;
+        padding: 0 15px;
+        justify-content: center;
+        user-select: none;
+        h5 {
+          font-weight: normal;
+          position: absolute;
+          left: 15px;
+          bottom: 0;
+          opacity: .7;
+          &::before {
+            content: '';
+            display: block;
+            height: 20px;
+            width: 20px;
+            background-image: url('/arrow-follow.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            transform: rotate(-70deg) scaleX(-1);
+            position: absolute;
+            right: -20px;
+            top: -15px;
+          }
+        }
+      }
+      .password-container 
+        > img {
+        position: absolute;
+        right: 15px;
+      }
+      .verificate-container {
+        display: flex;
+        border-radius: 7px;
+        overflow: hidden;
+      }
+      input {
+        &#name, &#name:invalid , &#email, &#email:invalid
+        , &.password, &.password:invalid , &#verificate, &#verificate:invalid {
+          width: 350px;
+          line-height: 1.2rem;
+          padding: 10px 15px;
+          font-size: 1rem;
+          background-color: var(--theme-white);
+          border-radius: 7px;
+          border: 3px solid var(--theme-inactive);
+          transition: border .2s;
+        }
+        &#name:focus, &#name:hover, &#name:valid , &#email:focus, &#email:hover, &#email:valid
+          , &.password:focus, &.password:hover, &.password:valid , &#verificate:focus, &#verificate:hover, &#verificate:valid {
+          border: 3px solid var(--theme-black);
+        }
+        &.password ~ img, &.password:invalid ~ img {
+          opacity: .5;
+          transition: opacity .2s;
+        }
+        &.password:focus ~ img, &.password:hover ~ img, &.password:valid ~ img {
+          opacity: 1;
+        }
+        &:focus {
+          outline: none;
+        }
+        &#verificate ~ .get-verfication-code, &#verificate:invalid ~ .get-verfication-code {
+          position: absolute;
+          right: 0;
+          padding: 15px;
+          background-color: var(--theme-inactive);
+          color: var(--theme-white);
+          font-weight: normal;
+          cursor: pointer;
+          transition: background-color .2s;
+        }
+        &#verificate:focus ~ .get-verfication-code, &#verificate:hover ~ .get-verfication-code
+          , &#verificate:valid ~ .get-verfication-code, .get-verfication-code:hover {
+          background-color: var(--theme-black) !important;
+        }
+      }
+      h4.register {
+        width: 200px;
+        text-align: center;
+        border: 3px solid var(--theme-black);
+        border-radius: 7px;
+        padding: 7px;
+        font-size: 1.25rem;
+        cursor: pointer;
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+        &::before {
+          content: '';
+          display: block;
+          width: 0px;
+          height: 200px;
+          position: absolute;
+          transform-origin: left;
+          left: 0px;
+          top: -0px;
 
-    border: 3px solid var(--theme-inactive);
-    transition: border .2s;
+          background-color: var(--theme-black);
+          z-index: -1;
+          transform: rotate(-45deg);
+          transition: width .3s, height .3s;
+        }
+        &:hover {
+          transform: translateY(-2px) scale(1.05);
+          box-shadow: 0 5px 5px var(--shadow-black);
+          color: var(--theme-white);
+          &::before {
+            width: 300px;
+            height: 200px;
+          }
+        }
+      }
+    }
   }
-   input#name:focus, input#name:hover, input#name:valid 
-    , input#email:focus, input#email:hover, input#email:valid
-    , input.password:focus, input.password:hover, input.password:valid
-    , input#verificate:focus, input#verificate:hover, input#verificate:valid {
-    border: 3px solid var(--theme-black);
-  }
-  input.password ~ img, input.password:invalid ~ img {
-    opacity: .5;
-    transition: opacity .2s;
-  }
-  input.password:focus ~ img, input.password:hover ~ img, input.password:valid ~ img {
-    opacity: 1;
-  }
-  input:focus {
-    outline: none;
-  }
-  .verificate-container {
-    display: flex;
-    border-radius: 7px;
-    overflow: hidden;
-  }
-  input#verificate ~ .get-verfication-code, input#verificate:invalid ~ .get-verfication-code {
-    position: absolute;
-    right: 0;
-    padding: 15px;
-    background-color: var(--theme-inactive);
-    color: var(--theme-white);
-    font-weight: normal;
-    cursor: pointer;
-
-    transition: background-color .2s;
-  }
-  input#verificate:focus ~ .get-verfication-code, input#verificate:hover ~ .get-verfication-code
-    , input#verificate:valid ~ .get-verfication-code, .get-verfication-code:hover {
-    background-color: var(--theme-black) !important;
-  }
-  h4.register {
-    width: 200px;
-    text-align: center;
-    border: 3px solid var(--theme-black);
-    border-radius: 7px;
-    padding: 7px;
-    font-size: 1.25rem;
-    cursor: pointer;
-    
-    overflow: hidden;
-    transition: transform .2s, box-shadow .2s;
-  }
-  h4.register:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 5px 5px var(--shadow-black);
-    color: var(--theme-white);
-  }
-  h4.register::before {
-    content: '';
-    display: block;
-    width: 0px;
-    height: 200px;
-    position: absolute;
-    transform-origin: left;
-    left: 0px;
-    top: -0px;
-
-    background-color: var(--theme-black);
-    z-index: -1;
-    transform: rotate(-45deg);
-    transition: width .3s, height .3s;
-  }
-  h4.register:hover::before {
-    width: 300px;
-    height: 200px;
-  }
-
 </style>

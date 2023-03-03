@@ -144,77 +144,79 @@
   </div>
 </template>
 
-<style scoped>
-  h3 {
-    font-size: 1.25rem;
-    letter-spacing: 0.5px;
-  }
-  .icon {
-    width: 50px;
-    text-align: center;
-    margin-left: 10px;
-  }
+<style scoped lang="scss">
   .container {
     flex-direction: column;
-  }
-  .container > * {
-    width: 100%;
-    display: flex;
-  }
-  .spacing {
-    width: 60px;
-  }
-  .user-infos-container {
-    border: 3px solid var(--theme-black);
-    border-radius: 7px;
-    padding: 40px 80px;
-  }
-  .user-infos-container h2 {
-    font-size: 1.75rem;
-  }
-  .user-infos-container h3 {
-    font-size: 1.4rem;
-  }
-  .user-infos-container h4 {
-    font-size: 1.1rem;
-  }
-  .user-infos-container .user-personal-infos {
-    width: 50%;
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-  }
-  .user-infos-container .user-personal-infos img {
-    margin-right: 50px;    
-  }
-  .user-infos-container .user-personal-infos div > * {
-    letter-spacing: 0.5px;
-    margin: 5px 0;
-  }
-  .user-infos-container .user-operated-infos {
-    width: 50%;
-  }
-  .user-infos-container .user-operated-infos ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .user-infos-container .user-operated-infos ul li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px 20px;
-  }
-  .user-infos-container .user-operated-infos ul li h3 {
-    width: 125px;
-    margin-top: 5px;
-    padding: 10px;
-    border: 3px solid var(--theme-black);
-    border-radius: 5px;
-    text-align: center;
-  }
-  .relative-board-containerimg {
-    cursor: pointer;
+    h3 {
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+    }
+    .icon {
+      width: 50px;
+      text-align: center;
+      margin-left: 10px;
+    }
+    > * {
+      width: 100%;
+      display: flex;
+    }
+    .user-infos-container {
+      border: 3px solid var(--theme-black);
+      border-radius: 7px;
+      padding: 40px 80px;
+      h2 {
+        font-size: 1.75rem;
+      }
+      h3 {
+        font-size: 1.4rem;
+      }
+      h4 {
+        font-size: 1.1rem;
+      }
+      .user-personal-infos {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        img {
+          margin-right: 50px;
+        }
+        div > * {
+          letter-spacing: 0.5px;
+          margin: 5px 0;
+        }
+      }
+      .user-operated-infos {
+        width: 50%;
+        ul {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+          li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px 20px;
+            h3 {
+              width: 125px;
+              margin-top: 5px;
+              padding: 10px;
+              border: 3px solid var(--theme-black);
+              border-radius: 5px;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+    .relative-board-container {
+      img {
+        cursor: pointer;
+      }
+      .spacing {
+        width: 60px;
+      }
+    }
   }
 </style>

@@ -92,16 +92,18 @@
   </div>
 </template>
 
-<style>
+<style lang="scss">
   .container > * {
     margin-bottom: 50px;
   }
-  ul::-webkit-scrollbar {
-    width: 13px;
-    background-color: var(--theme-white);
-    border-left: 2px solid var(--theme-black);
-  }
-  ul::-webkit-scrollbar-thumb {
-    background-color: var(--theme-black);
+  ul {
+    &::-webkit-scrollbar {
+      width: 13px;
+      background-color: var(--theme-white);
+      border-left: 2px solid var(--theme-black);
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--theme-black);
+    }
   }
 </style>
