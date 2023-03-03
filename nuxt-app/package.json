@@ -5,15 +5,11 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "deploy": "gh-pages -d dist"
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@pinia/nuxt": "^0.4.6",
     "nuxt": "^3.2.0",
     "pinia": "^2.0.30"
-  },
-  "dependencies": {
-    "gh-pages": "^5.0.0"
   }
 }
