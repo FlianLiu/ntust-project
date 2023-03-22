@@ -152,14 +152,17 @@
       </div>
       <div class="leave-comment-container">
         <div class="leave-comment">
-          <div>
+          <div class="leave-comment-title">
             <h3>留下您的想法吧！</h3>
             <span>in {{ data.positions[selectedPostion]['position-name'] }}</span>
           </div>
           <div class="leave-comment-input-container">
             <img src="/rabbit-1.png" height="50" alt="">
             <div class="input-container">
-              <input type="text" placeholder="請輸入留言內容..." v-model="userCommented">
+              <textarea type="text" placeholder="請輸入留言內容..." v-model="userCommented" rows="1"></textarea>
+            </div>
+            <div class="submit-button double-solid-border">
+              <h4>送出</h4>
               <img src="/send.png" height="24" alt="">
             </div>
           </div>
@@ -221,11 +224,11 @@
     }
     .comment-container {
       width: 100%;
-      height: 440px;
+      height: 445px;
       display: flex;
       justify-content: space-between;
       .comments {
-        width: 615px;
+        width: 660px;
         height: 100%;
         overflow-y: scroll;
         &::-webkit-scrollbar {
@@ -243,17 +246,30 @@
           padding-right: 15px;
           li.comment {
             display: flex;
-            justify-content: space-between;
             border: 3px solid var(--theme-black);
             border-radius: 5px;
             padding: 15px;
             margin-bottom: 10px;
+            background-color: var(--theme-white);
             &:last-child {
               margin-bottom: 0;
             }
+            &::before {
+              content: '';
+              display: block;
+              position: absolute;
+              left: 5px;
+              top: 5px;
+              z-index: -1;
+              width: calc(100% + 3px);
+              height: calc(100% + 3px);
+              border: 3px solid var(--theme-black);
+              border-radius: 5px;
+            }
             img.report {
-              margin-top: -5px;
-              margin-right: -5px;
+              position: absolute;
+              top: 10px;
+              right: 10px;
               cursor: pointer;
             }
             .headshot {
@@ -269,6 +285,9 @@
                 font-size: .8rem;
                 opacity: 0.7;
                 letter-spacing: 0.5px;
+              }
+              p {
+                max-width: 400px;
               }
               > div {
                 display: flex;
@@ -296,7 +315,7 @@
         }
       }
       .leave-comment-container {
-        width: 585px;
+        width: 630px;
         padding-left: 20px;
         h3 {
           font-size: 1.25rem;
@@ -309,11 +328,13 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            margin-bottom: 15px;
             span {
               font-size: .9rem;
               padding-top: 3px;
             }
+          }
+          .leave-comment-title {
+            margin-bottom: 15px;
           }
           .leave-comment-input-container {
             display: flex;
@@ -321,27 +342,46 @@
             align-items: center;
             border: 3px solid var(--theme-black);
             border-radius: 5px;
-            padding: 15px;
-            padding-right: 30px;
+            padding: 15px 20px;
+            background-color: var(--theme-white);
+            &::before {
+              content: '';
+              display: block;
+              position: absolute;
+              left: 5px;
+              top: 5px;
+              z-index: -1;
+              width: calc(100% + 3px);
+              height: calc(100% + 3px);
+              border: 3px solid var(--theme-black);
+              border-radius: 5px;
+            }
             .input-container {
-              width: 440px;
-              border-bottom: 3px solid var(--theme-black);
-              padding-bottom: 2px;
-              margin-bottom: -3px;
-              img {
-                cursor: pointer;
-              }
-              input {
-                margin-left: 5px;
-                line-height: 1.2rem;
-                padding-top: 2px;
-                font-size: 1rem;
-                width: 100%;
+              textarea {
+                width: 350px;
                 border: none;
-                background-color: var(--theme-white);
+                border-bottom: 3px solid var(--theme-black);
+                font-size: 1rem;
+                line-height: 1.5rem;
+                resize: none;
+                &::-webkit-scrollbar {
+                  display: none;
+                }
+                &:focus {
+                  outline: none;
+                }
               }
-              input:focus {
-                outline: none;
+            }
+            .submit-button {
+              --border-offset: 3px;
+              --border-minus-offset: -3px;
+              --border-hover-translate: 6px;
+              padding: 5px 20px;
+              border: 3px solid var(--theme-black);
+              border-radius: 5px;
+              cursor: pointer;
+              h4 {
+                margin-right: 10px;
               }
             }
           }

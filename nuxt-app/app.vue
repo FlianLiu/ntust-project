@@ -14,9 +14,10 @@
   :root {
     --theme-black: #252525;
     --theme-white: white;
-    --theme-red: rgba(246, 67, 67, 1);
     --theme-inactive: rgba(121, 121, 121, 1);
-    --shadow-black: rgba(0,0,0,0.2);
+    --shadow-black: rgba(37, 37, 37, 0.2);
+    --double-border-black: rgba(121, 121, 121, 1);
+    --double-border-active-black: rgba(162, 162, 162, 0.9);
   }
   html {
     font-family: '微軟正黑體';
@@ -30,20 +31,13 @@
     justify-content: center;
   }
   #__nuxt {
-    padding-top: 120px;
+    padding-top: 100px;
   }
   h2 {
     font-size: 2rem;
   }
   h3 {
-    font-size: 1.75rem;
-  }
-  .container {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    font-size: 1.5rem;
   }
   li {
     list-style-type: none;
@@ -51,5 +45,21 @@
   a, a:visited, a:hover, a:active {
     text-decoration: none;
     color: var(--theme-black);
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .double-solid-border {
+    box-shadow: var(--border-offset) var(--border-offset) 0px var(--double-border-black);
+    transition: .2s;
+  }
+  .double-solid-border:hover {
+    box-shadow: var(--border-hover-translate) var(--border-hover-translate) 0px var(--double-border-black);
+    transform: translate(var(--border-minus-offset), var(--border-minus-offset));
   }
 </style>

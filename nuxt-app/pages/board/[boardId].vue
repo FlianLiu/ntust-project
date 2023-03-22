@@ -17,7 +17,7 @@
         'ref-article-title-in-other-website': 'title4',
         'ref-article-link-in-other-website': 'https://www.google.com'
       },{
-        'ref-article-title-in-other-website': 'title4',
+        'ref-article-title-in-other-website': 'title5',
         'ref-article-link-in-other-website': 'https://www.google.com'
       },
     ],

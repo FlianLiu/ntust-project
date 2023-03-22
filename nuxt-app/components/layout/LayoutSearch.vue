@@ -3,6 +3,9 @@
   import { useAuthStore } from '~~/stores/authorization';
   const { userId, state, userHeadShotNumber, resetState, setPreviousPage } = useAuthStore();
 
+  const topKeywords = useState('topKeywords', ()=> ['標籤','標籤','標籤','標籤','標籤','標籤','標籤']);
+  
+
   const { showLogoutBtn, showRegisterBtn } = defineProps({
     showLogoutBtn: {
       type: Boolean,
@@ -18,7 +21,7 @@
   const searchBar = useState('search-bar', ()=> '');
 
   const data = reactive({
-    topKeywords: ['標籤','標籤','標籤','標籤','標籤','標籤','標籤'],
+    topKeywords: topKeywords,
     search: searchBar
   });
 
@@ -35,21 +38,16 @@
 <template>
   <nav>
     <div class="container">
-      <NuxtLink to="/" @click="resetSearchBar()" class="mb-0">
+      <NuxtLink to="/" @click="resetSearchBar()">
         <h3>時事辯論分析平台</h3>
-        <!-- <h3>兔年配口茶</h3> -->
-        <!-- <h3>隧道肆月</h3> -->
       </NuxtLink>
-      <div class="search-container mb-0">
+      <div class="search-container">
         <div class="search-bar">
           <div class="img-container">
-            <img src="/search.png" alt="" height="22">
+            <img src="/search.png" alt="" height="28">
           </div>
           <input type="text" placeholder="搜尋您感興趣的關鍵詞..." v-model="data.search">
         </div>
-        <ul class="tags">
-          <li v-for="keyword in data.topKeywords" @click="searchTag(keyword)">{{ keyword }}</li>
-        </ul>
       </div>
       <div class="infos">
         <NuxtLink to="/petition">
@@ -93,41 +91,51 @@
     background-color: var(--theme-white);
     .container {
       flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-start;
+      justify-content: flex-start;
+      align-items: center;
       padding: 20px 0;
-      .mb-0 {
+      > a {
+        width: 300px;
+      }
+      > * {
         margin-bottom: 0;
         display: flex;
         align-items: center;
       }
-      h3 {
-        padding-top: 10px;
-      }
-      > * {
-        width: 33%;
-      }
       .search-container {
-        width: 50%;
+        width: 700px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        .search-bar {
+        &::before {
+          content: '';
+          display: block;
           width: 100%;
-          max-width: 500px;
-          margin-bottom: 10px;
+          height: 100%;
+          border-radius: 10px;
           border: 3px solid var(--theme-black);
-          border-radius: 7px;
+          z-index: -1;
+          position: absolute;
+          left: 5px;
+          top: 4px;
+        }
+        .search-bar {
+          height: 45px;
+          width: 100%;
+          max-width: 700px;
+          border: 3px solid var(--theme-black);
+          background-color: var(--theme-white);
+          border-radius: 10px;
           display: flex;
           align-items: center;
           .img-container {
+            height: 100%;
             display: flex;
             align-items: center;
-            padding: 7px 20px 7px 15px;
+            padding: 0 15px;
             cursor: pointer;
           }
           input {
-            margin-left: 10px;
             line-height: 1.2rem;
             padding-top: 2px;
             font-size: 1rem;
@@ -155,9 +163,11 @@
       }
       .infos {
         height: 50px;
+        width: 320px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
+        align-self: flex-end;
         margin-bottom: 0;
         img {
           width: 40px;

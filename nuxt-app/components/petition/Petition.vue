@@ -35,6 +35,11 @@
     return SigningBoardsList;
   }
 
+  const launchPetition = reactive({
+    title: '',
+    motivation: ''
+  });
+
 
 </script>
 
@@ -53,11 +58,11 @@
         </template>
         <template #buttonActive>
           <h4>已參與連署</h4>
-          <img src="/signing-true.png" height="28" alt="">
+          <img src="/signing-true.png" height="24" alt="">
         </template>
         <template #buttonInactive>
           <h4>支持連署</h4>
-          <img src="/signing-false.png" height="28" alt="">
+          <img src="/signing-false.png" height="24" alt="">
         </template>
       </PetitionList>
       <div class="spacing"></div>
@@ -70,7 +75,7 @@
         </template>
         <template #buttonInactive>
           <h4>前往看板</h4>
-          <img src="/send.png" height="28" alt="">
+          <img src="/send.png" height="24" alt="">
         </template>
       </PetitionList>
     </div>
@@ -80,11 +85,11 @@
         <p>#注意: 每個用戶每個月最多只能發起3次連署！</p>
       </div>
       <div class="launch-container">
-        <input type="text" placeholder="請輸入欲連署的看板名稱..." class="title">
-        <input type="text" placeholder="請輸入開版動機..." class="launch-reason">
-        <div class="button">
-          <h4>發起連署！</h4>
-          <img src="/create-signing.png" height="28" alt="">
+        <textarea type="text" placeholder="請輸入欲連署的看板名稱..." rows="1" v-model="launchPetition.title"></textarea>
+        <textarea type="text" placeholder="請輸入開版動機..." rows="1" v-model="launchPetition.motivation"></textarea>
+        <div class="button double-solid-border">
+          <h4>發起連署</h4>
+          <img src="/create-signing.png" height="24" alt="">
         </div>
       </div>
     </div>
@@ -100,6 +105,9 @@
         letter-spacing: 0.5px;
       }
       .button {
+        --border-offset: 3px;
+        --border-minus-offset: -3px;
+        --border-hover-translate: 6px;
         width: 150px;
         display: flex;
         align-items: center;
@@ -109,6 +117,9 @@
         border-radius: 5px;
         cursor: pointer;
         user-select: none;
+        h4 {
+          margin-right: 5px;
+        }
         &.active {
           background-color: var(--theme-black);
           color: var(--theme-white);
@@ -145,24 +156,36 @@
       .launch-container {
         border: 3px solid var(--theme-black);
         border-radius: 7px;
-        padding: 10px;
-        padding-left: 20px;
+        padding: 20px;
+        padding-left: 30px;
         justify-content: space-between;
-        input {
+        background-color: var(--theme-white);
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 5px;
+          top: 5px;
+          z-index: -1;
+          width: calc(100% + 3px);
+          height: calc(100% + 3px);
+          border: 3px solid var(--theme-black);
+          border-radius: 7px;
+        }
+        textarea {
+          width: 500px;
           line-height: 1.25rem;
           font-size: 1rem;
           padding: 5px;
           border: none;
           border-bottom: 3px solid var(--theme-black);
           background-color: var(--theme-white);
+          resize: none;
           &:focus {
             outline: none;
           }
-          &.title {
-            width: 300px;
-          }
-          &.launch-reason {
-            width: 600px;
+          &::-webkit-scrollbar {
+            display: none;
           }
         }
       }

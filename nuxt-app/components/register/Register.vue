@@ -158,6 +158,14 @@
         display: flex;
         border-radius: 7px;
         overflow: hidden;
+        &:hover {
+          #verificate {
+            border: 3px solid var(--theme-black);
+          }
+          .get-verfication-code {
+            background-color: var(--theme-black) !important;
+          }
+        } 
       }
       input {
         &#name, &#name:invalid , &#email, &#email:invalid
@@ -172,7 +180,8 @@
           transition: border .2s;
         }
         &#name:focus, &#name:hover, &#name:valid , &#email:focus, &#email:hover, &#email:valid
-          , &.password:focus, &.password:hover, &.password:valid , &#verificate:focus, &#verificate:hover, &#verificate:valid {
+          , &.password:focus, &.password:hover, &.password:valid 
+          , &#verificate:focus, &#verificate:valid {
           border: 3px solid var(--theme-black);
         }
         &.password ~ img, &.password:invalid ~ img {
@@ -195,8 +204,7 @@
           cursor: pointer;
           transition: background-color .2s;
         }
-        &#verificate:focus ~ .get-verfication-code, &#verificate:hover ~ .get-verfication-code
-          , &#verificate:valid ~ .get-verfication-code, .get-verfication-code:hover {
+        &#verificate:focus ~ .get-verfication-code, &#verificate:valid ~ .get-verfication-code {
           background-color: var(--theme-black) !important;
         }
       }

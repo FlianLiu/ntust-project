@@ -52,7 +52,7 @@
     <h5 class="date">#{{ data.date }}</h5>
     <h1>{{ data.title }}</h1>
     <ul class="tags">
-      <li v-for="tag in data.tags" @click="searchTag(tag)" class="tag">{{ tag }}</li>
+      <li v-for="tag in data.tags" @click="searchTag(tag)" class="tag double-solid-border">{{ tag }}</li>
     </ul>
     <div class="links-container">
       <div class="link-title" @click="isShowLink = !isShowLink">
@@ -60,8 +60,8 @@
         <img src="/arrow.png" v-if="!isShowLink" alt="" height="12">
         <img src="/arrow-down.png" v-if="isShowLink" alt="" height="12">
       </div>
-      <ul class="links" v-if="isShowLink">
-        <li class="link" v-for="link in data.sourceLinkList">
+      <ul class="links" :class="{'show': isShowLink}">
+        <li class="link" v-for="(link, index) in data.sourceLinkList" :style="'--delay: '+index*0.1+'s'">
           <a :href="link['ref-article-link-in-other-website']">
             <span>{{ link['ref-article-title-in-other-website'] }}:</span>{{ link['ref-article-link-in-other-website'] }}
           </a>
@@ -106,12 +106,16 @@
     ul.tags {
       display: flex;
       li.tag {
+        --border-offset: 2px;
+        --border-minus-offset: -3px;
+        --border-hover-translate: 5px;
         padding: 2px 10px;
         margin-right: 10px;
         border: 2px solid var(--theme-black);
         border-radius: 5px;
         font-size: .95rem;
         cursor: pointer;
+        
       }
     }
     .links-container {
@@ -125,14 +129,35 @@
         }
       }
       ul.links {
+        height: 0;
         padding-left: 15px;
         margin-left: 3px;
         border-left: 2px dotted var(--theme-black);
+        overflow: hidden;
         li {
           margin: 5px 0;
           letter-spacing: 0.5px;
+          &::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            background-color: var(--theme-white);
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
           span {
             margin-right: 10px;
+          }
+        }
+        &.show {
+          height: auto;
+          li {
+            &::after {
+              width: 0%;
+              transition: width .25s var(--delay);
+            }
           }
         }
       }

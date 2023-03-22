@@ -71,13 +71,13 @@
             <template v-if="linkToBoard">
                 <template v-if="(board['number-of-signers'] == undefined) || (board['number-of-signers'] >= 30)">
                   <NuxtLink :to="'/board/'+board['board-id']">
-                    <div class="button" :class="[{'active': colorReverse}]">
+                    <div class="button double-solid-border" :class="[{'active': colorReverse}]">
                       <slot name="buttonInactive"></slot>
                     </div>
                   </NuxtLink>
                 </template>
                 <template v-else>
-                  <div class="button" :class="[{'active': !colorReverse}]">
+                  <div class="button double-solid-border" :class="[{'active': !colorReverse}]">
                     <slot name="buttonActive"></slot>
                   </div>
                 </template>
@@ -86,10 +86,10 @@
 
             </template>
             <template v-else>
-              <div v-if="board['user-is-supported']" class="button" :class="[{'active': !colorReverse}]">
+              <div v-if="board['user-is-supported']" class="button double-solid-border" :class="[{'active': !colorReverse}]">
                 <slot name="buttonActive"></slot>
               </div>
-              <div v-else class="button" :class="[{'active': colorReverse}]">
+              <div v-else class="button double-solid-border" :class="[{'active': colorReverse}]">
                 <slot name="buttonInactive"></slot>
               </div>
             </template>
@@ -103,18 +103,29 @@
 <style scoped lang="scss">
   .petitioning-container {
     width: 50%;
-    .petitioning-boards {
+    .petitioning-boards { 
       &.border {
         &::before {
           content: '';
-          display: flex;
           height: 100%;
           width: calc(100% - 30px);
+          border: 3px solid var(--theme-black);
+          border-radius: 5px;
           position: absolute;
           top: 0;
           left: 0;
+          background-color: var(--theme-white);
+        }
+        &::after {
+          content: '';
+          height: 100%;
+          width: calc(100% - 30px);
           border: 3px solid var(--theme-black);
           border-radius: 5px;
+          position: absolute;
+          top: 5px;
+          left: 5px;
+          z-index: -1;
         }
         ul {
           height: 260px;
@@ -125,7 +136,7 @@
         }
       }
       ul {
-        height: 387px;
+        height: 395px;
         display: flex;
         flex-direction: column;
         overflow-y: scroll;
@@ -134,11 +145,22 @@
           border: 2px solid var(--theme-black);
         }
         li {
-          margin-bottom: 0;
           &.border {
             border-radius: 5px;
             border: 3px solid var(--theme-black);
             margin-bottom: 15px;
+            background-color: var(--theme-white);
+            &::before {
+              content: '';
+              height: calc(100% + 5px);
+              width: calc(100% + 5px);
+              border: 3px solid var(--theme-black);
+              border-radius: 5px;
+              position: absolute;
+              top: 3px;
+              left: 3px;
+              z-index: -1;
+            }
           }
           &:last-child {
             margin-bottom: 0;
@@ -169,7 +191,7 @@
               padding-left: 20px;
             }
             .title {
-              max-width: 280px;
+              max-width: 350px;
               padding: 0px 20px;
               display: -webkit-box;
               -webkit-line-clamp: var(--max-line);
@@ -192,11 +214,14 @@
       display: inline-block;
     }
     .button {
+      --border-offset: 3px;
+      --border-minus-offset: -3px;
+      --border-hover-translate: 6px;
       width: 150px;
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding: 5px 15px;
+      padding: 7px 15px;
       border: 3px solid var(--theme-black);
       border-radius: 5px;
       cursor: pointer;
@@ -204,6 +229,12 @@
       &.active {
         background-color: var(--theme-black);
         color: var(--theme-white);
+        &.double-solid-border {
+          box-shadow: var(--border-offset) var(--border-offset) 0px var(--double-border-active-black);
+          &:hover {
+            box-shadow: var(--border-hover-translate) var(--border-hover-translate) 0px var(--double-border-active-black);
+          }
+        }
         > * {
           font-weight: normal;
         }

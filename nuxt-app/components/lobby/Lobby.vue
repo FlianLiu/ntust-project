@@ -75,7 +75,7 @@
       const el = keywordElements[i];
       const count = el.dataset.count;
       const maxCount = el.dataset.maxCount;
-      el.style.width = `${ 20 + 130*(count/maxCount) }px`;
+      el.style.width = `${ 25 + 100*(count/maxCount) }px`;
     }
 
   });
@@ -85,22 +85,33 @@
 <template>
   <LayoutSearch />
   <div class="container">
-    <h2>近期熱門看板</h2>
-    <LobbyListItem 
-      v-for="board in data.data"
-      :id="board['board-id']"
-      :numberOfLike="board['number-of-like']"
-      :date="board.date"
-      :title="board.title"
-      :tags="board.tags"
-      :imageCloud="board['image-cloud']"
-      :keywordWithCount="board['keyworks-with-count']"
-    />
+    <LayoutAsideNavbar class="aside" />
+    <main>
+      <LobbyListItem
+        v-for="board in data.data"
+        :id="board['board-id']"
+        :numberOfLike="board['number-of-like']"
+        :date="board.date"
+        :title="board.title"
+        :tags="board.tags"
+        :imageCloud="board['image-cloud']"
+        :keywordWithCount="board['keyworks-with-count']"
+      />
+    </main>
   </div>
 </template>
 
-<style scoped>
-  h2 {
-    margin-bottom: 30px;
+<style scoped lang="scss">
+  .container {
+    align-items: flex-start;
+    flex-direction: row;
+    .aside {
+      width: 200px;
+      position: fixed;
+    }
+    main {
+      margin-left: 300px;
+      width: 1020px;
+    }
   }
 </style>

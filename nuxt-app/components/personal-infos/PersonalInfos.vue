@@ -81,27 +81,43 @@
         <ul>
           <li>
             <h4>留言收到的讚數</h4>
-            <h3>{{ userOperated['number-of-received-likes'] }}</h3>
+            <div class="infos-list-container">
+              <h3>{{ userOperated['number-of-received-likes'] }}</h3>
+            </div>
           </li>
           <li>
             <h4>發表的留言數</h4>
-            <h3>{{ userOperated['number-of-released-comments'] }}</h3>
+            <div class="infos-list-container">
+              <h3>{{ userOperated['number-of-released-comments'] }}</h3>
+            </div>
           </li>
           <li>
             <h4>收藏的看板數</h4>
-            <h3>{{ userOperated['number-of-collect-boards'] }}</h3>
+            
+            <div class="infos-list-container">
+              <h3>{{ userOperated['number-of-collect-boards'] }}</h3>
+            </div>
           </li>
           <li>
             <h4>按讚的留言數</h4>
-            <h3>{{ userOperated['number-of-like-comments'] }}</h3>
+            
+            <div class="infos-list-container">
+              <h3>{{ userOperated['number-of-like-comments'] }}</h3>
+            </div>
           </li>
           <li>
             <h4>發起連署次數</h4>
-            <h3>{{ userOperated['number-of-launch-petition-boards'] }}</h3>
+            
+            <div class="infos-list-container">
+              <h3>{{ userOperated['number-of-launch-petition-boards'] }}</h3>
+            </div>
           </li>
           <li>
             <h4>連署投票次數</h4>
-            <h3>{{ userOperated['number-of-support-signing-boards'] }}</h3>
+            
+            <div class="infos-list-container">
+              <h3>{{ userOperated['number-of-support-signing-boards'] }}</h3>
+            </div>
           </li>
         </ul>
       </div>
@@ -164,6 +180,19 @@
       border: 3px solid var(--theme-black);
       border-radius: 7px;
       padding: 40px 80px;
+      background-color: var(--theme-white);
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        z-index: -10;
+        width: calc(100% + 3px);
+        height: calc(100% + 3px);
+        border: 3px solid var(--theme-black);
+        border-radius: 7px;
+      }
       h2 {
         font-size: 1.75rem;
       }
@@ -198,13 +227,29 @@
             flex-direction: column;
             align-items: center;
             margin: 10px 20px;
-            h3 {
-              width: 125px;
-              margin-top: 5px;
-              padding: 10px;
-              border: 3px solid var(--theme-black);
-              border-radius: 5px;
-              text-align: center;
+            h4 {
+              margin-bottom: 5px;
+            }
+            .infos-list-container {
+              &::before {
+                content: '';
+                display: block;
+                position: absolute;
+                left: 5px;
+                top: 5px;
+                width: 100%;
+                height: 100%;
+                border: 3px solid var(--theme-black);
+                border-radius: 5px;
+              }
+              h3 {
+                width: 125px;
+                padding: 10px;
+                border: 3px solid var(--theme-black);
+                border-radius: 5px;
+                text-align: center;
+                background-color: var(--theme-white);
+              }
             }
           }
         }
