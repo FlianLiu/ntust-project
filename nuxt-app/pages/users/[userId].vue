@@ -1,57 +1,72 @@
 <script setup>
+  import { useAuthStore } from '~~/stores/authorization';
+  const { baseAPI, userToken, userId } = useAuthStore();
+
   const data = reactive({
-    'user-established-date': '2023/02/15',
-    'personal-operate-history': {
-      'number-of-received-likes': 127,
-      'number-of-released-comments': 31,
-      'number-of-collect-boards': 63,
-      'number-of-like-comments': 256,
-      'number-of-launch-petition-boards': 3,
-      'number-of-support-signing-boards': 16,
-    },
-    'colleted-boards': [
-      {
-        'board-id': 'uuid-board-id-1',
-        'board-title': 'board-title-1 board-title-1 board-title-1 board-title-1 board-title-1',
+    'user-established-date': '',
+    'personal-operate-history': {},
+    'collected-boards':[],
+    'supported-signing-boards': [],
+    'converted-supported-signing-boards': []
+  });
+
+  async function fetchSupportedSigningBoardData(boardId) {
+    const { data:res } = await useFetch(`${baseAPI}/petition/get-signing-board-infos/${boardId}`, {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${userToken}`,
+        "user-id": userId
       },
-      {
-        'board-id': 'uuid-board-id-2',
-        'board-title': 'board-title-2',
+    });
+
+    return {
+      "board-title": res.value['board-title'], 
+      "number-of-signers": res.value['number-of-signers']
+    }
+  }
+  async function fetchData() {
+    const { data:res } = await useFetch(`${baseAPI}/auth/post-query-personal-infos`, {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${userToken}`,
+        "user-id": userId
       },
-      {
-        'board-id': 'uuid-board-id-3',
-        'board-title': 'board-title-3',
-      },
-      {
-        'board-id': 'uuid-board-id-4',
-        'board-title': 'board-title-4',
-      },
-      {
-        'board-id': 'uuid-board-id-5',
-        'board-title': 'board-title-5',
-      },
-      {
-        'board-id': 'uuid-board-id-6',
-        'board-title': 'board-title-6',
-      },
-      {
-        'board-id': 'uuid-board-id-7',
-        'board-title': 'board-title-7',
-      },
-    ],
-    'supported-signing-boards': [
-      'board-id-1','board-id-2','board-id-3','board-id-4','board-id-5','board-id-6','board-id-7'
-    ],
-  })
+      pick: ['user-established-date', 'personal-operate-history', 'collected-boards', 'supported-signing-boards']
+    });
+    data['user-established-date'] = res.value['user-established-date'];
+    data['personal-operate-history'] = res.value['personal-operate-history'];
+    data['collected-boards'] = res.value['collected-boards'];
+    data['supported-signing-boards'] = res.value['supported-signing-boards'];
+
+    data['converted-supported-signing-boards'] = [];
+		for( let i=0; i<data['supported-signing-boards'].length; i++) {
+      const res = await fetchSupportedSigningBoardData(data['supported-signing-boards'][i]['signing-board-id']);
+      data['converted-supported-signing-boards'].push(reactive({
+				'board-id': data['supported-signing-boards'][i]['signing-board-id'],
+				'board-title': res['board-title'],
+				'number-of-signers': res['number-of-signers'],
+				'user-is-supported': true
+			}));
+		}
+  }
+  provide('fetchData', fetchData);
+  fetchData();
+
+  function setUserSupported(index, isSupported) {
+    data['converted-supported-signing-boards'][index]['user-is-supported'] = isSupported;
+    data['converted-supported-signing-boards'][index]['number-of-signers'] += isSupported? 1: -1;
+    data['personal-operate-history']['number-of-support-signing-boards'] += isSupported? 1: -1;
+  }
+  provide('setUserSupported', setUserSupported);
+
 </script>
 
 <template>
-  <PersonalInfos 
+  <PersonalInfos
     :userEstablishedDate="data['user-established-date']"
-    :userHeadshotNumber="data['user-header-icon']"
     :personalOperateHistory="data['personal-operate-history']"
-    :colletedBoards="data['colleted-boards']"
-    :supportedSigningBoards="data['supported-signing-boards']"
+    :collectedBoards="data['collected-boards']"
+    :supportedSigningBoards="data['converted-supported-signing-boards']"
   />
 </template>
 

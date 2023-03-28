@@ -1,11 +1,13 @@
 <script setup>
   import { useSearchBar } from '@/composables/searchBar.js';
+  import { useAuthStore } from '~~/stores/authorization';
   const { searchTag } = useSearchBar();
+  const { baseAPI } = useAuthStore(); 
 
   const { id, numberOfLike, date, title, tags, imageCloud, keywordWithCount } = defineProps({
     id: {
       type: String,
-      default: 'IMG alt'
+      default: ''
     },
     numberOfLike: {
       type: Number,
@@ -46,6 +48,8 @@
     }
   });
   const toggleGraph = ref(false);
+  const toBoardPage = ref('');
+  if (id !== '') toBoardPage.value = '/board/'+ id;
 
   function calculateMaxKeywordCount(keywords) {
     let max = 0;
@@ -59,7 +63,7 @@
 
 <template>
   <div class="lobby-list-item">
-    <NuxtLink :to="'/board/'+id" class="board-infos-container">
+    <NuxtLink :to="toBoardPage" class="board-infos-container">
       <div class="board-title-container">
         <div class="board-info">
           <img src="/polular-board-fire.png" height="20" alt="">
@@ -68,12 +72,12 @@
         </div>
         <h3 class="title-text">{{ title }}</h3>
         <ul class="tags-container">
-          <li @click.prevent="searchTag(tag)" class="tag double-solid-border" v-for="tag in tags">
-            {{ tag }}
+          <li @click.prevent="searchTag(tag['tag-name'])" class="tag double-solid-border" v-for="tag in tags">
+            {{ tag['tag-name'] }}
           </li>
         </ul>
       </div>
-      <img class="image-cloud" :src="imageCloud" alt="">
+      <img class="image-cloud" :src="`${baseAPI}${imageCloud}`" alt="">
     </NuxtLink>
 
     <div class="keywords-container" :class="{'show': toggleGraph}">

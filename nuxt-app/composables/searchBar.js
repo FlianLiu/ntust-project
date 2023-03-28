@@ -10,6 +10,5 @@ export function useSearchBar() {
     const offset = searchKeyWords[0] === ''? searchBar.value : ( searchBar.value + ' ' );
     searchBar.value = isExist? searchBar.value : ( offset + tag );
   }
-
   return { searchTag }
 }

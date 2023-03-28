@@ -1,7 +1,15 @@
 <script setup>
   import { useSearchBar } from '@/composables/searchBar.js';
+  import { useAuthStore } from '~~/stores/authorization';
+  import { useCollectedBoard } from '~~/composables/userCollectedBoard';
+
   const { searchTag } = useSearchBar();
+  const { baseAPI, userToken, userId } = useAuthStore();
   const data = defineProps({
+    id: {
+      type: String,
+      default: 'board-id'
+    },
     date: {
       type: String,
       default: 'date'
@@ -34,15 +42,42 @@
       default: 0
     }
   });
+
   const isUserLike = ref(data.isUserLike);
   const likeCount = ref(data.numberOfLike);
-  watch(isUserLike ,()=> {
+  async function userLikeBoard() {
+    if (userId == '') {
+      window.alert('無效操作,請先登入!');
+      return
+    }
+    isUserLike.value = !isUserLike.value;
     const offset = data.isUserLike? -1: 0;
     const base = data.numberOfLike + offset;
     const delta = isUserLike.value? 1: 0;
     likeCount.value = base + delta;
-  })
+    await useFetch(`${baseAPI}/board/post-like-board`, {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${userToken}`,
+        "user-id": userId
+      },
+      body: {
+        "board-id": data.id,
+        "is-like": isUserLike.value
+      }
+    });
+  }
+
   const isUserCollected = ref(data.isUserCollected);
+  async function userCollectBoard() {
+    if (userId == '') {
+      window.alert('無效操作,請先登入!');
+      return
+    }
+    isUserCollected.value = !isUserCollected.value;
+    useCollectedBoard(data.id, isUserCollected.value, data.title);
+  }
+
   const isShowLink = ref(false);
 
 </script>
@@ -52,7 +87,7 @@
     <h5 class="date">#{{ data.date }}</h5>
     <h1>{{ data.title }}</h1>
     <ul class="tags">
-      <li v-for="tag in data.tags" @click="searchTag(tag)" class="tag double-solid-border">{{ tag }}</li>
+      <li v-for="tag in data.tags" @click="searchTag(tag['tag-name'])" class="tag double-solid-border">{{ tag['tag-name'] }}</li>
     </ul>
     <div class="links-container">
       <div class="link-title" @click="isShowLink = !isShowLink">
@@ -69,12 +104,12 @@
       </ul>
     </div>
     <div class="user-controls">
-      <div class="like-container" @click="isUserLike = !isUserLike">
+      <div class="like-container" @click="userLikeBoard">
         <img src="/like-true.png" height="24" alt="" v-show="isUserLike">
         <img src="/like-false.png" height="24" alt="" v-show="!isUserLike">
         <h5>{{ likeCount }}</h5>
       </div>
-      <div class="collect-container" @click="isUserCollected = !isUserCollected">
+      <div class="collect-container" @click="userCollectBoard">
         <img src="/collect-true.png" height="24" alt="" v-show="isUserCollected">
         <img src="/collect-false.png" height="24" alt="" v-show="!isUserCollected">
       </div>

@@ -1,10 +1,9 @@
 <script setup>
   import { useSearchBar } from '@/composables/searchBar.js';
   import { useAuthStore } from '~~/stores/authorization';
-  const { userId, state, userHeadShotNumber, resetState, setPreviousPage } = useAuthStore();
-
-  const topKeywords = useState('topKeywords', ()=> ['標籤','標籤','標籤','標籤','標籤','標籤','標籤']);
-  
+  import { useSearchResultStore } from '~~/stores/searchResult';
+  const { baseAPI, userId, state, userHeadShotNumber, resetState, setPreviousPage } = useAuthStore();
+  const { setSearchKeyword } = useSearchResultStore();
 
   const { showLogoutBtn, showRegisterBtn } = defineProps({
     showLogoutBtn: {
@@ -17,18 +16,38 @@
     }
   });
 
+  const topKeywords = useState('topKeywords', ()=> ['']);
+  async function fetchTopKeywordData() {
+    const { data:res } = await useFetch(`${baseAPI}/board/get-popular-keywords`, {
+      method: 'GET',
+    });
+    topKeywords.value = res.value.tags;
+  }
+  fetchTopKeywordData();
+
   const { searchTag } = useSearchBar();
   const searchBar = useState('search-bar', ()=> '');
-
-  const data = reactive({
-    topKeywords: topKeywords,
-    search: searchBar
-  });
+  const route = useRoute();
+  const fetchData = inject('fetchData');
 
   function resetSearchBar() {
     searchBar.value = "";
+    setSearchKeyword("");
+    if (route.fullPath === '/') {
+      fetchData();
+    }
   }
-  function login() {
+  function searchKeywords() {
+    setSearchKeyword(searchBar.value);
+    if (searchBar.value === '') return;
+    if (route.fullPath === '/') {
+      fetchData();
+    }else {
+      navigateTo('/');
+    }
+  }
+  
+  function toLoginPage() {
     const route = useRoute();
     if (route.path !== '/register') setPreviousPage(route.path);
   }
@@ -38,21 +57,22 @@
 <template>
   <nav>
     <div class="container">
-      <NuxtLink to="/" @click="resetSearchBar()">
+      <NuxtLink to="/" @click="resetSearchBar">
         <h3>時事辯論分析平台</h3>
       </NuxtLink>
       <div class="search-container">
         <div class="search-bar">
-          <div class="img-container">
+          <div class="img-container" @click="searchKeywords">
             <img src="/search.png" alt="" height="28">
           </div>
-          <input type="text" placeholder="搜尋您感興趣的關鍵詞..." v-model="data.search">
+          <input type="text" placeholder="搜尋您感興趣的關鍵詞..." v-model="searchBar" @keydown.enter="searchKeywords">
         </div>
       </div>
       <div class="infos">
         <NuxtLink to="/petition">
           <h4>連署開版</h4>
         </NuxtLink>
+
         <template v-if="showLogoutBtn">
           <NuxtLink to="/">
             <h4 @click="resetState">登出</h4>
@@ -63,14 +83,14 @@
             <h4>註冊</h4>
           </NuxtLink>
         </template>
-        <template v-else-if="state">
+        <template v-else-if="state && userId !== ''">
           <NuxtLink :to="'/users/'+userId">
             <!-- user headshot -->
-            <img src="/rabbit-1.png" height="40" alt="">
+            <img :src="'/rabbit-'+userHeadShotNumber+'.png'" height="40" alt="">
           </NuxtLink>
         </template>
         <template v-else>
-          <NuxtLink to="/login" @click="login">
+          <NuxtLink to="/login" @click="toLoginPage">
             <h4>登入</h4>
           </NuxtLink>
         </template>
@@ -147,18 +167,6 @@
             }
           }
           
-        }
-        ul.tags {
-          display: flex;
-          max-width: 500px;
-          li {
-            padding: 2px 10px;
-            margin: 0 5px;
-            border: 2px solid var(--theme-black);
-            border-radius: 5px;
-            font-size: 0.95rem;
-            cursor: pointer;
-          }
         }
       }
       .infos {

@@ -1,8 +1,15 @@
 <script setup>
   import { useAuthStore } from '~~/stores/authorization';
-  const topKeywords = useState('topKeywords');
+  const topKeywords = useState('topKeywords', ()=> {tags: ['']});
   const { userId } = useAuthStore();
   const { searchTag } = useSearchBar();
+
+  const userInfos = ref('');
+  if (userId !== '') {
+    userInfos.value = '/users/'+userId;
+  }else {
+    userInfos.value = '/login';
+  }
 </script>
 
 <template>
@@ -12,7 +19,7 @@
         <img src="/create-signing.png" alt="" height="18">
         <h4>連署開版</h4>
       </NuxtLink>
-      <NuxtLink :to="'/users/'+userId" class="link">
+      <NuxtLink :to="userInfos" class="link">
         <img src="/profile.png" alt="" height="18">
         <h4>個人資料</h4>
       </NuxtLink>
@@ -20,8 +27,8 @@
     <div class="top-keywords">
       <h4>近期熱門關鍵詞</h4>
       <ul class="keywords">
-        <li class="keyword double-solid-border" v-for="keyword in topKeywords" @click="searchTag(keyword)">
-          {{ keyword }}
+        <li class="keyword double-solid-border" v-for="keyword in topKeywords" @click="searchTag(keyword['tag-name'])">
+          {{ keyword['tag-name'] }}
         </li>
       </ul>
     </div>
@@ -70,6 +77,7 @@
         border-radius: 5px;
         background-color: var(--theme-white);
         cursor: pointer;
+        user-select: none;
       }
     }
   }

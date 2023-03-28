@@ -3,11 +3,14 @@ import { defineStore } from 'pinia'
 export const useAuthStore = defineStore('authorization', () => {
   const userId = ref('');
   const userName = ref('');
-  const userHeadShotNumber = ref(0);
+  const userHeadShotNumber = ref(1);
   const userEmail = ref('');
+  const userPassword = ref('');
   const userToken = ref('');
   const state = ref(false);
+  const keepState = ref(false);
   const previousPage = ref('');
+  const baseAPI = ref('http://localhost:80');
 
   function resetState() {
     userId.value = '';
@@ -16,27 +19,41 @@ export const useAuthStore = defineStore('authorization', () => {
     userEmail.value = '';
     userToken.value = '';
     state.value = false;
-    console.log('logout!');
   }
-  function setState() {
-    userId.value = 'uuid';
-    userName.value = 'Flian';
-    userHeadShotNumber.value = 1;
-    userEmail.value = 'test@gmail.com';
-    userToken.value = 'token';
+  function setState(id, name, headshot, email, password, token) {
+    userId.value = id;
+    userName.value = name;
+    userHeadShotNumber.value = headshot===""? 1: headshot;
+    userEmail.value = email;
+    userPassword.value = password;
+    userToken.value = token;
+
     state.value = true;
-    console.log('login!');
+
+    if (keepState.value) {
+      localStorage.setItem('email', userEmail.value);
+      localStorage.setItem('password', userPassword.value);
+      localStorage.setItem('keepState', keepState.value);
+    }else {
+      localStorage.setItem('email', '');
+      localStorage.setItem('password', '');
+      localStorage.setItem('keepState', false);
+    }
   }
   function switchState(state) {
     state.value = state;
   }
-
   function setPreviousPage(path) {
     previousPage.value = path;
-    // console.log('set previous page to: '+ previousPage.value)
+  }
+  function setKeepState(newState) {
+    keepState.value = newState;
   }
 
+
   return {
+    baseAPI,
+
     userId,
     userName,
     userHeadShotNumber,
@@ -44,6 +61,8 @@ export const useAuthStore = defineStore('authorization', () => {
     userToken,
 
     state,
+    keepState,
+    setKeepState,
     switchState,
     resetState,
     setState,

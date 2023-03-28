@@ -1,4 +1,6 @@
 <script setup>
+  import { useAuthStore } from '~~/stores/authorization';
+  const { baseAPI } = useAuthStore();
   const data = defineProps({
     imageCloud: {
       type: String,
@@ -51,7 +53,7 @@
           </ul>
         </div>
       </div>
-      <img src="/image-cloud.png" height="300" alt="">
+      <img :src="`${baseAPI}${imageCloud}`" height="300" alt="">
       <div class="keyword-bar-chart">
         <template v-for="(keywordObject, index) in data.keywordsWithCount">
           <div class="keyword" v-if="index <= 4">

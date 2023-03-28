@@ -1,78 +1,46 @@
 <script setup>
-  const data = reactive({
-	'signing-boards': [
-		{
-			'signing-board-id': 'uuid-signing-board-1',
-			'signing-board-title': 'signing-board-title-1',
-			'number-of-signers': 27,
-			'user-is-supported': true,
-		},
-    {
-			'signing-board-id': 'uuid-signing-board-2',
-			'signing-board-title': 'signing-board-title-2',
-			'number-of-signers': 25,
-			'user-is-supported': false,
-		},
-    {
-			'signing-board-id': 'uuid-signing-board-3',
-			'signing-board-title': 'signing-board-title-3 signing-board-title-3 signing-board-title-3 signing-board-title-3',
-			'number-of-signers': 23,
-			'user-is-supported': false,
-		},
-    {
-			'signing-board-id': 'uuid-signing-board-4',
-			'signing-board-title': 'signing-board-title-4',
-			'number-of-signers': 21,
-			'user-is-supported': true,
-		},
-    {
-			'signing-board-id': 'uuid-signing-board-5',
-			'signing-board-title': 'signing-board-title-5',
-			'number-of-signers': 19,
-			'user-is-supported': false,
-		},
-    {
-			'signing-board-id': 'uuid-signing-board-6',
-			'signing-board-title': 'signing-board-title-6',
-			'number-of-signers': 7,
-			'user-is-supported': true,
-		},
-	],
-	'recently-achieved-boards': [
-		{
-			'board-id': 'uuid-board-id-1',
-			'board-title': 'board-title-1',
-		},
-		{
-			'board-id': 'uuid-board-id-2',
-			'board-title': 'board-title-2',
-		},
-		{
-			'board-id': 'uuid-board-id-3',
-			'board-title': 'board-title-3 board-title-3 board-title-3 board-title-3 board-title-3',
-		},
-		{
-			'board-id': 'uuid-board-id-4',
-			'board-title': 'board-title-4',
-		},
-		{
-			'board-id': 'uuid-board-id-5',
-			'board-title': 'board-title-5',
-		},
-		{
-			'board-id': 'uuid-board-id-6',
-			'board-title': 'board-title-6',
-		},
-		{
-			'board-id': 'uuid-board-id-7',
-			'board-title': 'board-title-7',
-		},
-	]});
+	import { useAuthStore } from '~~/stores/authorization';
+	const { baseAPI, userToken, userId } = useAuthStore();
+
+	const data = reactive({
+		"signing-boards": [],
+		"converted-signing-boards": [],
+		"recently-achieved-boards": [],
+	})
+	async function fetchData() {
+		const { data: res } = await useFetch(`${baseAPI}/petition/get-signing-achieved-board`, {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${userToken}`,
+        "user-id": userId
+      },
+    });
+    data['signing-boards'] = res.value['signing-boards'] === null? []: res.value['signing-boards'];
+    data['recently-achieved-boards'] = res.value['recently-achieved-boards'] === null? []: res.value['recently-achieved-boards'];
+	
+		data['converted-signing-boards'] = [];
+		for( let i=0; i<data['signing-boards'].length; i++) {
+			data['converted-signing-boards'].push(reactive({
+				'board-id': data['signing-boards'][i]['signing-board-id'],
+				'board-title': data['signing-boards'][i]['signing-board-title'],
+				'number-of-signers': data['signing-boards'][i]['number-of-signers'],
+				'user-is-supported': data['signing-boards'][i]['is-user-supported'],
+			}))
+		}
+	}
+	provide('fetchData', fetchData);
+	fetchData();
+
+	function setUserSupported(index, isSupported) {
+		data['converted-signing-boards'][index]['user-is-supported'] = isSupported;
+		data['converted-signing-boards'][index]['number-of-signers'] += isSupported? 1: -1;
+	}
+	provide('setUserSupported', setUserSupported);
 
 </script>
 <template>
   <Petition 
-    :signingBoards="data['signing-boards']"
+    :signingBoards="data['converted-signing-boards']"
     :recentlyAchievedBoards="data['recently-achieved-boards']"
   />
 </template>

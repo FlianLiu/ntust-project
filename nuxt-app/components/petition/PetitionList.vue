@@ -39,15 +39,26 @@
     }
   })
 
-  onMounted(()=> {
+  const buttonActiveEvent = inject('buttonActiveEvent');
+  const buttonInactiveEvent = inject('buttonInactiveEvent');
+
+  function computeBarLength() {
     const maxCount = 30;
     const signingBarElements = document.querySelectorAll('.signing-progress-bar .signing-bar');
     for (let i=0; i<signingBarElements.length; i++) {
       const el = signingBarElements[i];
-      const count = el.dataset.count;
-      el.style.width = `${ 100 * (count/maxCount) }%`;
+      el.dataset.count = el.dataset.count < 0? 0: el.dataset.count;
+      el.dataset.count = el.dataset.count > 30? 30: el.dataset.count;
+      el.style.width = `${ 100 * (el.dataset.count/maxCount) }%`;
     }
+  }
+
+  onMounted(()=> {
+    computeBarLength();
   });
+  onUpdated(()=> {
+    computeBarLength();
+  })
 </script>
 
 <template>
@@ -55,41 +66,51 @@
     <h3>{{ listTitle }}</h3>
     <div class="petitioning-boards" :class="[{'border': containerBorder}]">
       <ul>
-        <li v-for="board in list" :data-board-id="board['board-id']" :key="board['board-id']" :class="[{'border': listBorder}]">
-          <div class="signing-progress-bar" v-if="progressBar && board['number-of-signers']">
+        <li v-if="list.length == 0" class="isNull"><h3>暫無資料</h3></li>
+        <li v-for="(board, index) in list" :data-board-id="board['board-id']" :key="board['board-id']" :class="[{'border': listBorder}]">
+          <div class="signing-progress-bar" v-if="progressBar && board['number-of-signers'] !== undefined">
             <div class="signing-bar" :data-count="board['number-of-signers']"></div>
           </div>
           <div class="infos-container" :class="[{'haveProgressBar': progressBar}]">
             <div class="icon">
-              <slot name="icon" :numberOfSigners="board['number-of-signers']" v-if="board['number-of-signers']"></slot>
-              <slot name="icon" v-if="!board['number-of-signers']"></slot>
+              <slot name="icon" :numberOfSigners="board['number-of-signers']" v-if="board['number-of-signers'] !== undefined"></slot>
+              <slot name="icon" :boardId="board['board-id']" :boardTitle="board['board-title']" v-else></slot>
             </div>
             <div class="title" :style="'--max-line: '+titleMaxLine+';font-size: '+(1 + (titleMaxLine - 1)/4 )+'rem'">
               <slot name="title" :title="board['board-title']"></slot>
             </div>
 
             <template v-if="linkToBoard">
-                <template v-if="(board['number-of-signers'] == undefined) || (board['number-of-signers'] >= 30)">
-                  <NuxtLink :to="'/board/'+board['board-id']">
-                    <div class="button double-solid-border" :class="[{'active': colorReverse}]">
-                      <slot name="buttonInactive"></slot>
-                    </div>
-                  </NuxtLink>
-                </template>
-                <template v-else>
-                  <div class="button double-solid-border" :class="[{'active': !colorReverse}]">
-                    <slot name="buttonActive"></slot>
+              <template v-if="(board['number-of-signers'] == undefined) || (board['number-of-signers'] >= 30)">
+                <NuxtLink :to="'/board/'+board['board-id']">
+                  <div class="button double-solid-border" :class="[{'active': colorReverse}]">
+                    <slot name="buttonInactive"></slot>
                   </div>
-                </template>
+                </NuxtLink>
+              </template>
+              <template v-else-if="board['user-is-supported']">
+                <div class="button double-solid-border" :class="[{'active': !colorReverse}]" 
+                  @click="buttonActiveEvent(index, board['board-id'])">
+                  <slot name="buttonActive"></slot>
+                </div>
+              </template>
+              <template v-else>
+                <div class="button double-solid-border" :class="[{'active': colorReverse}]" 
+                  @click="buttonInactiveEvent(index, board['board-id'])">
+                  <slot name="buttonCanceled"></slot>
+                </div>
+              </template>
             </template>
             <template v-else-if="false">
 
             </template>
             <template v-else>
-              <div v-if="board['user-is-supported']" class="button double-solid-border" :class="[{'active': !colorReverse}]">
+              <div v-if="board['user-is-supported']" class="button double-solid-border" :class="[{'active': !colorReverse}]" 
+                @click="buttonActiveEvent(index, board['board-id'])">
                 <slot name="buttonActive"></slot>
               </div>
-              <div v-else class="button double-solid-border" :class="[{'active': colorReverse}]">
+              <div v-else class="button double-solid-border" :class="[{'active': colorReverse}]" 
+                @click="buttonInactiveEvent(index, board['board-id'])">
                 <slot name="buttonInactive"></slot>
               </div>
             </template>
@@ -145,6 +166,16 @@
           border: 2px solid var(--theme-black);
         }
         li {
+          &.isNull{
+            height: 100%;
+            display: flex;
+            align-items: center;
+            h3 {
+              margin: 0;
+              text-align: center;
+              transform: translateY(-5px);
+            }
+          }
           &.border {
             border-radius: 5px;
             border: 3px solid var(--theme-black);
@@ -173,7 +204,6 @@
             overflow: hidden;
             border-bottom: 3px solid var(--theme-black);
             .signing-bar {
-              width: 75%;
               height: 100%;
               background-color: var(--theme-black);
             }

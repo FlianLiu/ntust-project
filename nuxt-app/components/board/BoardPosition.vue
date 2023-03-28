@@ -1,10 +1,14 @@
 <script setup>
   import { useSearchBar } from '@/composables/searchBar.js';
+  import { useAuthStore } from '~~/stores/authorization';
+
   const { searchTag } = useSearchBar();
-  const data = defineProps({
+  const { baseAPI, userToken, userId, userName } = useAuthStore();
+
+  const { positions } = defineProps({
     positions: {
       type: Array[Object],
-      defulat: [{
+      default: [{
         'position-name': 'position',
         'position-id': 'position-uuid',
         'comments': [
@@ -119,26 +123,70 @@
 
   const selectedPostion = ref(0);
   const userCommented = ref('')
+  const fetchData = inject('fetchData');
+  async function submitComment() {
+    if (userCommented.value === '') {
+      window.alert('請先輸入留言內容後，再按送出按鈕!');
+      return
+    }
+    if (userId === '') {
+      window.alert('登入後才能留言哦!');
+      return
+    }
+    await useFetch(`${baseAPI}/board/post-comment`, {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${userToken}`,
+        "user-id": userId,
+        "user-name": userName
+      },
+      body: {
+        "post-position-id": positions[selectedPostion.value]['position-id'],
+        "comment":{
+            "commented-user-id": userId,
+            "content": userCommented.value
+        }
+      }
+    });
+    userCommented.value = '';
+    fetchData();
+    window.alert('已送出留言!');
+  }
+
+  const likeCommentTrigger = inject('likeComment');
+  function likeComment(index, commentId) {
+    if (userId === '') {
+      window.alert('登入後才能按讚留言哦!');
+      return
+    }
+    likeCommentTrigger(index, commentId, selectedPostion.value);
+  }
+
+  function reportComment() {
+    window.alert('此功能暫未開放!')
+  }
+
 </script>
 
 <template>
   <div class="position-container">
     <div class="position-bar">
-      <div class="position" v-for="(position, index) in data.positions" @click="selectedPostion = index" 
+      <div class="position" v-for="(position, index) in positions" @click="selectedPostion = index" 
           :class="[selectedPostion == index? 'active':'']">
         <h4>{{ position['position-name'] }}</h4>
       </div>
     </div>
     <div class="comment-container">
       <div class="comments">
-        <ul>
-          <li class="comment" v-for="commentObject in data.positions[selectedPostion].comments">
+        <ul :class="{'isNull': positions[selectedPostion].comments.length === 0}">
+          <li v-if="positions[selectedPostion].comments.length === 0" class="isNull"><h3>當第一位留言者吧!</h3></li>
+          <li class="comment" v-for="(commentObject ,index) in positions[selectedPostion].comments">
             <img class="headshot" src="/rabbit-1.png" alt="" height="50">
             <div>
               <h5 class="date"># {{ commentObject['commented-date'] }}</h5>
               <div>
                 <h4>{{ commentObject['commented-user-name'] }}</h4>
-                <div class="like-container">
+                <div class="like-container" @click="likeComment(index, commentObject['comment-id'])">
                   <img src="/like-true.png" height="16" v-show="commentObject['is-user-liked']" alt="">
                   <img src="/like-false.png" height="16" v-show="!commentObject['is-user-liked']" alt="">
                   <h5>{{ commentObject['number-of-like'] }}</h5>
@@ -146,7 +194,7 @@
               </div>
               <p>{{ commentObject.content }}</p>
             </div>
-            <img class="report" src="/report.png" alt="" height="24">
+            <img class="report" src="/report.png" alt="" height="24" @click="reportComment">
           </li>
         </ul>
       </div>
@@ -154,14 +202,14 @@
         <div class="leave-comment">
           <div class="leave-comment-title">
             <h3>留下您的想法吧！</h3>
-            <span>in {{ data.positions[selectedPostion]['position-name'] }}</span>
+            <span>in {{ positions[selectedPostion]['position-name'] }}</span>
           </div>
           <div class="leave-comment-input-container">
             <img src="/rabbit-1.png" height="50" alt="">
             <div class="input-container">
               <textarea type="text" placeholder="請輸入留言內容..." v-model="userCommented" rows="1"></textarea>
             </div>
-            <div class="submit-button double-solid-border">
+            <div class="submit-button double-solid-border" @click="submitComment">
               <h4>送出</h4>
               <img src="/send.png" height="24" alt="">
             </div>
@@ -244,6 +292,17 @@
           display: flex;
           flex-direction: column;
           padding-right: 15px;
+          &.isNull {
+            height: 100%;
+            justify-content: center;
+            li.isNull {
+              transform: translateY(-5px);
+              h3 {       
+                text-align: center; 
+                font-size: 1.25rem;
+              }
+            }
+          }
           li.comment {
             display: flex;
             border: 3px solid var(--theme-black);

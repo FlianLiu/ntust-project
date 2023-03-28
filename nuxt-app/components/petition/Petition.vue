@@ -1,10 +1,13 @@
 <script setup>
-  const data = defineProps({
+  import { useAuthStore } from '~~/stores/authorization';
+  import { useSupportedBoard } from '~~/composables/userSupportedBoard';
+  const { baseAPI, userId, userToken } = useAuthStore();
+  const { signingBoards, recentlyAchievedBoards } = defineProps({
     signingBoards: {
       type: Array[Object],
       default: [{
-        'signing-board-id': 'uuid-board-id',
-        'signing-board-title': 'board-title',
+        'board-id': 'uuid-board-id',
+        'board-title': 'board-title',
         'number-of-signers': 0,
         'user-is-supported': false,
       }]
@@ -17,29 +20,54 @@
       }]
     }
   });
-  
-  const SigningBoardsList = reactive(convertSigningBoardsToList());
-  function convertSigningBoardsToList() {
-    const list = data.signingBoards;
-    const SigningBoardsList = [];
-    for( let i=0; i<list.length; i++) {
-      const listItem = list[i];
-      const convertedListItem = {
-        'board-id': listItem['signing-board-id'],
-        'board-title': listItem['signing-board-title'],
-        'number-of-signers':  listItem['number-of-signers'],
-        'user-is-supported':  listItem['user-is-supported']
-      }
-      SigningBoardsList.push(convertedListItem);
-    }
-    return SigningBoardsList;
-  }
 
   const launchPetition = reactive({
     title: '',
     motivation: ''
   });
+  const fetchData = inject('fetchData');
+  async function submitLaunchPetition() {
+    if (launchPetition.title === '' || launchPetition.motivation === '') {
+      window.alert('請完整輸入內容後，才可發起連署!!');
+      return
+    }
+    if (userId === '' || userToken === '') {
+      window.alert('請先登入後，才可發起連署!!');
+      return
+    }
+    const { data: res } = await useFetch(`${baseAPI}/petition/post-initiate-board`, {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${userToken}`,
+        "user-id": userId
+      },
+      body: {
+        "board-title": launchPetition.title,
+        "board-motivation": launchPetition.motivation
+      }
+    });
+    if (res.value.status === "success") window.alert('您已成功發起連署!!');
+    fetchData();
+  }
+  
+  function isUserLogin() {
+    if (userId === '' || userToken === '') window.alert('無效操作，請先登入!!');
+    return !(userId === '' || userToken === '');
+  }
 
+  const setUserSupported = inject('setUserSupported');
+  function buttonActiveEvent(index, boardId) {
+    if (!isUserLogin()) return;
+    setUserSupported(index, false);
+    useSupportedBoard(boardId, false);
+  }
+  function buttonInactiveEvent(index, boardId) {
+    if (!isUserLogin()) return;
+    setUserSupported(index, true);
+    useSupportedBoard(boardId, true);
+  }
+  provide('buttonActiveEvent', buttonActiveEvent);
+  provide('buttonInactiveEvent', buttonInactiveEvent);
 
 </script>
 
@@ -47,7 +75,7 @@
   <LayoutSearch />
   <div class="container">
     <div class="petition-container">
-      <PetitionList listTitle="參與連署投票 !" :progressBar="true" :list="SigningBoardsList" :titleMaxLine="2">
+      <PetitionList listTitle="參與連署投票 !" :progressBar="true" :list="signingBoards" :titleMaxLine="2">
         <template #icon="{ numberOfSigners }">
           <div class="icon">
            <h4>{{ numberOfSigners }}/30</h4>
@@ -66,7 +94,7 @@
         </template>
       </PetitionList>
       <div class="spacing"></div>
-      <PetitionList listTitle="近期連署看板：" :linkToBoard="true" :list="data['recentlyAchievedBoards']" :titleMaxLine="2">
+      <PetitionList listTitle="近期連署看板：" :linkToBoard="true" :list="recentlyAchievedBoards" :titleMaxLine="2">
         <template #icon>
           <span>已達標</span>
         </template>
@@ -87,7 +115,7 @@
       <div class="launch-container">
         <textarea type="text" placeholder="請輸入欲連署的看板名稱..." rows="1" v-model="launchPetition.title"></textarea>
         <textarea type="text" placeholder="請輸入開版動機..." rows="1" v-model="launchPetition.motivation"></textarea>
-        <div class="button double-solid-border">
+        <div class="button double-solid-border" @click="submitLaunchPetition">
           <h4>發起連署</h4>
           <img src="/create-signing.png" height="24" alt="">
         </div>

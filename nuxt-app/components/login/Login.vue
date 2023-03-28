@@ -1,20 +1,42 @@
 <script setup>
   import { useAuthStore } from '~~/stores/authorization';
-  const { setState, previousPage } = useAuthStore();
+  const { baseAPI, keepState, setKeepState, setState, previousPage } = useAuthStore();
 
   const passwordType = ref('password');
+  const headshotNumber = ref(1);
+  const headshot = computed(()=> '/rabbit-'+headshotNumber.value+'.png');
+
   const email = ref('');
   const password = ref('');
-  const headshot = ref('/rabbit-1.png');
-  const headshotNumber = ref(1);
+  const isKeepState = ref(keepState);
 
-  watch(headshotNumber, ()=> {
-    headshot.value = 'rabbit-' + headshotNumber.value + '.png';
+  watch(isKeepState, ()=> {
+    setKeepState(isKeepState.value);
   })
 
-  function login() {
+  async function login() {
     // login API
-    setState();
+    if(email.value === '' || password.value === '') {
+      window.alert('電子信箱或密碼不可為空!!')
+      return
+    }
+
+    const { data, error } = await useFetch(`${baseAPI}/auth/post-login`, {
+      method: 'POST',
+      body: {
+        "user-account": email.value,
+        "user-password": password.value
+      }
+    });
+    if (error.value !== null) {
+      window.alert('電子信箱或密碼輸入錯誤!!');
+      return
+    }
+    if (data.value.status === 'success') {
+      window.alert('登入成功!')
+      setState(data.value['user-id'], data.value['user-name'], data.value['user-headshot-number'], data.value['user-email'], password.value, data.value['user-token']);
+      navigateTo(previousPage);
+    }
   }
 
   function reRoll() {
@@ -22,6 +44,12 @@
   }
 
   onMounted(()=> {
+    const storageEmail = localStorage.getItem('email');
+    const storagePassword = localStorage.getItem('password');
+    const storageKeepState = localStorage.getItem('keepState');
+    email.value = storageEmail;
+    password.value = storagePassword;
+    isKeepState.value = storageKeepState;
   })
 
 </script>
@@ -49,18 +77,16 @@
       </div>
       <div class="selector-container">
         <div>
-          <input id="keep-status" type="checkbox">
+          <input id="keep-status" type="checkbox" v-model="isKeepState">
           <label for="keep-status">
-            <h4>保持登入狀態</h4>
+            <h4>記住登入狀態</h4>
           </label>
         </div>
         <NuxtLink>
           <h4>忘記密碼</h4>
         </NuxtLink>
       </div>
-      <NuxtLink :to="previousPage">
-        <h4 class="login" @click="login">登入</h4>
-      </NuxtLink>
+      <h4 class="login" @click="login">登入</h4>
     </form>
   </div>
 </template>
@@ -109,11 +135,6 @@
           }
         }
       }
-      .password-container 
-        > img {
-        position: absolute;
-        right: 15px;
-      }
       input {
         &#email, &#email:invalid , &#password, &#password:invalid {
           width: 350px;
@@ -137,6 +158,20 @@
         }
         &:focus {
           outline: none;
+        }
+      }
+      .password-container {
+        &:hover {
+          input{
+            border: 3px solid var(--theme-black) !important;
+          }
+          img {
+            opacity: 1 !important;
+          }
+        }
+        img {
+          position: absolute;
+          right: 15px;
         }
       }
       .selector-container {

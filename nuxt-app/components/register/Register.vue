@@ -1,6 +1,6 @@
 <script setup>
   import { useAuthStore } from '~~/stores/authorization';
-  const { setState, previousPage } = useAuthStore();
+  const { baseAPI, setState, previousPage } = useAuthStore();
 
   const passwordType = ref('password');
   const checkPasswordType = ref('password');
@@ -13,18 +13,82 @@
   const email = ref('');
   const emailVerificationCode = ref('');
 
+  function reRoll() {
+    headshotNumber.value = (parseInt(headshotNumber.value) + 1) % 3 +1;
+  }
+  async function getVerficationCode() {
+    if (email.value === '') {
+      window.alert('請先輸入您的電子郵件');
+      return
+    }
+
+    const { data } = await useFetch(`${baseAPI}/auth/post-require-verification-code`, {
+      method: 'POST',
+      body: {
+        "user-mail": email.value
+      }
+    });
+    if ( data.value.status === "success") {
+      window.alert('已傳送驗證碼到您的信箱!')
+    }
+    // emailVerificationCode.value = data.value['verification-code'];
+  }
+
+  async function register() {
+    // login API
+    if(name.value === '' || password.value === '' || checkPassword.value === '' 
+      || email.value === '' || emailVerificationCode.value === '') {
+      window.alert('請確實填寫每個欄位內容!!')
+      return
+    }
+    if (password.value !== checkPassword) {
+      window.alert('密碼輸入不一致，請重新輸入!')
+      checkPassword.value = '';
+      return
+    }
+
+    const { data } = await useFetch(`${baseAPI}/auth/post-register`, {
+      method: 'POST',
+      body: {
+        "user-name": name.value,
+        "user-password": password.value,
+        "user-email": email.value,
+        "email-verification-code": emailVerificationCode.value,
+        "user-headshot-number": headshotNumber.value
+      }
+    });
+    if (data.value.result === "verifyError") {
+      window.alert('請先取得電子郵件驗證碼');
+      return
+    } else if (data.value.result === "insertError") {
+      window.alert('您輸入的電子郵件已經存在');
+      return
+    } else if (data.value.result === "verify error") {
+      window.alert('您輸入的驗證碼錯誤');
+      return
+    }
+
+    if (data.value.status === 'success') {
+      
+      const { data } = await useFetch(`${baseAPI}/auth/post-login`, {
+        method: 'POST',
+        body: {
+          "user-account": email.value,
+          "user-password": password.value
+        }
+      });
+      if (data.value.status === 'success') {
+        window.alert('註冊成功!');
+        setState(data.value['user-id'], data.value['user-name'], data.value['user-headshot-number'], data.value['user-email'], password.value, data.value['user-token']);
+        navigateTo(previousPage);
+      }
+      
+    }
+  }
+
   watch(headshotNumber, ()=> {
     headshot.value = 'rabbit-' + headshotNumber.value + '.png';
   })
-
-  function reRoll() {
-    headshotNumber.value = (headshotNumber.value + 1) % 3 +1;
-  }
-
-  function register() {
-    // register API
-    
-  }
 </script>
 
 <template>
@@ -80,11 +144,9 @@
       <div class="verificate-container">
         <input id="verificate" type="text" name="verificate" 
           placeholder="郵件驗證碼" v-model="emailVerificationCode" required autocomplete="off">
-        <h4 class="get-verfication-code">取得驗證碼</h4>
+        <h4 class="get-verfication-code" @click="getVerficationCode">取得驗證碼</h4>
       </div>
-      <NuxtLink :to="previousPage">
-        <h4 class="register" @click="register">註冊</h4>
-      </NuxtLink>
+      <h4 class="register" @click="register">註冊</h4>
     </form>
   </div>
 </template>
@@ -149,10 +211,19 @@
           }
         }
       }
-      .password-container 
-        > img {
-        position: absolute;
-        right: 15px;
+      .password-container {
+        &:hover {
+          input{
+            border: 3px solid var(--theme-black) !important;
+          }
+          img {
+            opacity: 1 !important;
+          }
+        }
+        img {
+          position: absolute;
+          right: 15px;
+        }
       }
       .verificate-container {
         display: flex;

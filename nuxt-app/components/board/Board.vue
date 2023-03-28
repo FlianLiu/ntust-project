@@ -1,5 +1,9 @@
 <script setup>
   const data = defineProps({
+    id: {
+      type: String,
+      default: '00000000-0000-0000-0000-000000000000'
+    },
     date: {
       type: String,
       default: 'date'
@@ -61,19 +65,21 @@
           }
         ]
       }]
-    }
+    },
   });
   
   onMounted(()=> {
     const seachBar = useState('search-bar', ()=> '');
     seachBar.value = '';
-  })
+  });
 </script>
 
 <template>
-  <LayoutSearch />
-  <div class="container">
+  <LayoutSearch/>
+  <h3 v-if="data.id === '00000000-0000-0000-0000-000000000000'">文章不存在!</h3>
+  <div class="container" v-else>
     <BoardInfos 
+      :id="data.id"
       :date="data.date"
       :title="data.title"
       :tags="data.tags"
