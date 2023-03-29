@@ -87,6 +87,7 @@
       :isUserCollected="data.isUserCollected"
       :isUserLike="data.isUserLike"
       :numberOfLike="data.numberOfLike"
+      :imageCloud="data.imageCloud"
     />
     <BoardAnalysis 
       :imageCloud="data.imageCloud"
@@ -111,5 +112,20 @@
     &::-webkit-scrollbar-thumb {
       background-color: var(--theme-black);
     }
+  }
+
+  @media (max-width: 1350px){
+
+  }
+  @media (max-width: 1250px) {
+    .container {
+      padding-top: 20px;
+      .board-infos-container {
+
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    
   }
 </style>

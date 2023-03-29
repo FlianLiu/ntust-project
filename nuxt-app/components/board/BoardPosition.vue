@@ -172,10 +172,23 @@
   <div class="position-container">
     <div class="position-bar">
       <div class="position" v-for="(position, index) in positions" @click="selectedPostion = index" 
-          :class="[selectedPostion == index? 'active':'']">
+        :class="[selectedPostion == index? 'active':'']">
         <h4>{{ position['position-name'] }}</h4>
       </div>
+      <div class="options-container">
+        <label for="position">
+          <h3>選擇立場: </h3>
+        </label>
+        <select name="" id="position" v-model="selectedPostion">
+          <option v-for="(position, index) in positions" :value="index">{{ position['position-name'] }}</option>
+        </select>
+        <a class="leave-commnet-container" href="#leave-comment-container">
+          <img src="/click.png" height="16" alt="">
+          <h4>留下您的想法吧!</h4>
+        </a>
+      </div>
     </div>
+    
     <div class="comment-container">
       <div class="comments">
         <ul :class="{'isNull': positions[selectedPostion].comments.length === 0}">
@@ -198,7 +211,7 @@
           </li>
         </ul>
       </div>
-      <div class="leave-comment-container">
+      <div class="leave-comment-container" id="leave-comment-container">
         <div class="leave-comment">
           <div class="leave-comment-title">
             <h3>留下您的想法吧！</h3>
@@ -265,6 +278,36 @@
           transform: translateY(0px);
           h4 {
             transform: translateY(0px);
+          }
+        }
+      }
+      .options-container {
+        width: 100%;
+        justify-content: flex-start;
+        align-items: center;
+        padding-bottom: 7px;
+        padding-left: 10px;
+        display: none;
+        label {
+          margin-right: 15px;
+          h3 {
+            font-size: 1.25rem;
+          }
+        }
+        select {
+          border: 2px solid var(--theme-black);
+          outline: none;
+          &:focus-visible {
+            outline: none;
+          }
+        }
+        .leave-commnet-container {
+          display: flex;
+          position: absolute;
+          right: 0;
+          cursor: pointer;
+          img {
+            margin-right: 5px;
           }
         }
       }
@@ -423,6 +466,7 @@
                 font-size: 1rem;
                 line-height: 1.5rem;
                 resize: none;
+                padding-left: 5px;
                 &::-webkit-scrollbar {
                   display: none;
                 }
@@ -477,6 +521,124 @@
               -webkit-box-orient: vertical;
               overflow: hidden;
               text-overflow: ellipsis;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1350px){
+
+  }
+  @media (max-width: 1250px) {
+    .position-container {
+      .comment-container {
+        height: auto;
+        flex-direction: column;
+        .comments {
+          height: 500px;
+          width: 100%;
+          margin-bottom: 50px;
+          ul li.comment {
+            &::before {
+              width: calc(100% + 3.5px);
+              height: calc(100% + 3.5px);
+              left: 3px;
+              top: 3px;
+            }
+            div {
+              h4 {
+                font-size: 1.2rem;
+              }
+              p {
+                max-width: 600px;
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+        .leave-comment-container {
+          width: 100%;
+          padding-left: 0;
+          .leave-comment {
+            margin-bottom: 40px;
+            .leave-comment-input-container .input-container {
+              textarea {
+                width: 500px;
+                padding-bottom: 2px;
+              }
+            }
+          }
+          .suggest-boards {
+            > h3 {
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    .position-container {
+      .position-bar {
+        border-bottom: 3px dashed var(--theme-black);
+        .position {
+          display: none;
+        }
+        .options-container {
+          display: flex;
+        }
+      }
+      .comment-container {
+        .comments {
+          height: 450px;
+          margin-bottom: 30px;
+          ul li.comment {
+            &::before {
+              border: none;
+            }
+            div {
+              p {
+                max-width: 240px;
+              }
+            }
+          }
+        }
+        .leave-comment-container {
+          .leave-comment {
+            margin-bottom: 30px;
+            .leave-comment-title {
+              margin-bottom: 10px;
+            }
+            .leave-comment-input-container {
+              padding: 15px;
+              &::before {
+                display: none;
+              }
+              > img {
+                height: 40px;
+              }
+              .input-container {
+                textarea {
+                  width: 250px;
+                  padding: 0;
+                  border: none;
+                  font-size: 1.05rem;
+                }
+              }
+              .submit-button {
+                border: none;
+                padding: 0;
+                h4 {
+                  display: none;
+                }
+              }
+            }
+          }
+          .suggest-boards {
+            ul {
+              padding-left: 10px;
             }
           }
         }

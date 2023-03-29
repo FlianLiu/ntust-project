@@ -4,7 +4,7 @@
   const data = defineProps({
     imageCloud: {
       type: String,
-      default: '/image-cloud.png'
+      default: ''
     },
     keywordsWithCount: {
       type: Array[Object],
@@ -34,12 +34,15 @@
     }
   });
 
+  // RWD event
+  const switchGraphState = ref(false);
+
 </script>
 
 <template>
   <div class="keyword-analysis-container">
     <div class="keyword-analysis">
-      <div class="entire-keyword-with-count-container">
+      <div class="entire-keyword-with-count-container" :class="{'show': !switchGraphState}">
         <div class="entire-keyword-with-count">
           <div>
             <h4>關鍵詞</h4>
@@ -53,8 +56,8 @@
           </ul>
         </div>
       </div>
-      <img :src="`${baseAPI}${imageCloud}`" height="300" alt="">
-      <div class="keyword-bar-chart">
+      <img :src="`${baseAPI}${data.imageCloud}`" height="300" alt="" class="image-cloud">
+      <div class="keyword-bar-chart" :class="{'show': switchGraphState}">
         <template v-for="(keywordObject, index) in data.keywordsWithCount">
           <div class="keyword" v-if="index <= 4">
             <div class="keyword-bar-container">
@@ -67,6 +70,7 @@
           </div>
         </template>
       </div>
+      <img src="/switch.png" alt="" height="16" class="switch-graph" @click="switchGraphState = !switchGraphState">
     </div>
   </div>
 </template>
@@ -183,7 +187,83 @@
           }
         }
       }
+      img.switch-graph {
+        height: 16px;
+        margin-right: 30px;
+        display: none;
+        cursor: pointer;
+      }
     }
   }
 
+
+  @media (max-width: 1350px){
+
+  }
+  @media (max-width: 1250px) {
+    .keyword-analysis-container {
+      .keyword-analysis {
+        .entire-keyword-with-count-container {
+          &::before {
+            display: none;
+          }
+          .entire-keyword-with-count {
+            ul {
+              margin-top: 30px;
+            }
+          }
+        }
+        img.image-cloud {
+          display: none;
+        }
+        .keyword-bar-chart {
+          .keyword {
+            .keyword-bar-container {
+              &::before {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    .keyword-analysis-container {
+      margin-bottom: 30px;
+      &::before {
+        display: none;
+      }
+      .keyword-analysis {
+        padding: 0;
+        border: none;
+        > div {
+          display: none !important;
+          &.show {
+            display: flex !important;
+          }
+        }
+        .entire-keyword-with-count-container {
+          height: 200px;
+          > div {
+            height: 200px;
+          }
+          .entire-keyword-with-count {
+            width: 300px;
+            font-size: 14px;
+            ul {
+              height: calc(100% - 30px);
+              margin-top: 29px;
+            }
+          }
+        }
+        .keyword-bar-chart {
+          height: 200px;
+        }
+        img.switch-graph {
+          display: block;
+        }
+      }
+    }
+  }
 </style>

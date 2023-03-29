@@ -31,11 +31,9 @@
     if ( data.value.status === "success") {
       window.alert('已傳送驗證碼到您的信箱!')
     }
-    // emailVerificationCode.value = data.value['verification-code'];
   }
 
   async function register() {
-    // login API
     if(name.value === '' || password.value === '' || checkPassword.value === '' 
       || email.value === '' || emailVerificationCode.value === '') {
       window.alert('請確實填寫每個欄位內容!!')
@@ -69,7 +67,6 @@
     }
 
     if (data.value.status === 'success') {
-      
       const { data } = await useFetch(`${baseAPI}/auth/post-login`, {
         method: 'POST',
         body: {
@@ -316,4 +313,64 @@
       }
     }
   }
+
+  @media (max-width: 1250px) {
+    .register-container {
+      min-height: calc(100vh - 80px);
+      padding: 0;
+      form {
+        border: 3px solid var(--theme-black);
+        &:hover {
+          transform: scale(1);
+          box-shadow: 0 0 0 var(--shadow-black);
+        }
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    .register-container {
+      min-height: calc(100vh - 50px);
+      padding: 0;
+      form {
+        width: 375px;
+        > * {
+          margin: 10px 0;
+        }
+        .carrot-container {
+          .carrot {
+            img {
+              height: 16px;
+            }
+          }
+        }
+        .headshot-container {
+          img {
+            height: 50px;
+          }
+        }
+        input#name, input#email, .password-container, .verificate-container {
+          margin: 5px 0;
+        }
+        .password-container {
+          img {
+            opacity: 1 !important;
+          }
+        }
+        input {
+          &#name, &#email, &.password, &#verificate {
+            &:focus, &:valid, &:invalid {
+              border: 3px solid var(--theme-black);
+              width: 325px;
+            }
+            border: 3px solid var(--theme-black);
+            width: 325px;
+          }
+        }
+        h4.get-verfication-code {
+          background-color: var(--theme-black) !important;
+        }
+      }
+    }
+  }
+
 </style>

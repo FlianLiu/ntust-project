@@ -69,13 +69,23 @@
   provide('buttonActiveEvent', buttonActiveEvent);
   provide('buttonInactiveEvent', buttonInactiveEvent);
 
+
+  // RWD event
+  const petitionBoardState = ref(true);
+  const launchPetitionState = ref(true);
+
 </script>
 
 <template>
   <LayoutSearch />
   <div class="container">
     <div class="petition-container">
-      <PetitionList listTitle="參與連署投票 !" :progressBar="true" :list="signingBoards" :titleMaxLine="2">
+      <div class="options-container">
+        <h3 @click="petitionBoardState = true" :class="{'show': petitionBoardState}">參與聯署投票</h3>
+        <h3 @click="petitionBoardState = false" :class="{'show': !petitionBoardState}">近期連署看板</h3>
+      </div>
+      <PetitionList listTitle="參與連署投票 !" :progressBar="true" :list="signingBoards" 
+        :titleMaxLine="2" :class="{'show': petitionBoardState}">
         <template #icon="{ numberOfSigners }">
           <div class="icon">
            <h4>{{ numberOfSigners }}/30</h4>
@@ -94,7 +104,8 @@
         </template>
       </PetitionList>
       <div class="spacing"></div>
-      <PetitionList listTitle="近期連署看板：" :linkToBoard="true" :list="recentlyAchievedBoards" :titleMaxLine="2">
+      <PetitionList listTitle="近期連署看板：" :linkToBoard="true" :list="recentlyAchievedBoards" 
+        :titleMaxLine="2" :class="{'show': !petitionBoardState}">
         <template #icon>
           <span>已達標</span>
         </template>
@@ -113,11 +124,16 @@
         <p>#注意: 每個用戶每個月最多只能發起3次連署！</p>
       </div>
       <div class="launch-container">
-        <textarea type="text" placeholder="請輸入欲連署的看板名稱..." rows="1" v-model="launchPetition.title"></textarea>
-        <textarea type="text" placeholder="請輸入開版動機..." rows="1" v-model="launchPetition.motivation"></textarea>
+        <div class="options-container">
+          <h4 @click="launchPetitionState = true" :class="{'show': launchPetitionState}">連署看板名稱</h4>
+          <h4 @click="launchPetitionState = false" :class="{'show': !launchPetitionState}">開版動機</h4>
+        </div>
+        <textarea type="text" placeholder="請輸入欲連署的看板名稱..." rows="1" v-model="launchPetition.title" :class="{'show': launchPetitionState}"></textarea>
+        <textarea type="text" placeholder="請輸入開版動機..." rows="1" v-model="launchPetition.motivation" :class="{'show': !launchPetitionState}"></textarea>
         <div class="button double-solid-border" @click="submitLaunchPetition">
           <h4>發起連署</h4>
-          <img src="/create-signing.png" height="24" alt="">
+          <img src="/create-signing.png" height="22" alt="">
+          <img src="/send.png" alt="" height="20" class="send-button">
         </div>
       </div>
     </div>
@@ -160,6 +176,19 @@
     .petition-container {
       width: 100%;
       display: flex;
+      .options-container {
+        display: none;
+        padding-bottom: 5px;
+        border-bottom: 3px dashed var(--theme-black);
+        h3 {
+          margin: 0 15px;
+          cursor: pointer;
+          opacity: 0.5;
+          &.show {
+            opacity: 1;
+          }
+        }
+      }
       .spacing {
         width: 60px;
       }
@@ -200,6 +229,30 @@
           border: 3px solid var(--theme-black);
           border-radius: 7px;
         }
+        .options-container {
+          width: 100%;
+          height: 35px;
+          padding: 0px 30px;
+          border-bottom: 3px dashed var(--theme-black);
+          display: flex;
+          align-items: center;
+          position: absolute;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          display: none;
+          h4 {
+            opacity: .5;
+            cursor: pointer;
+            user-select: none;
+            &:first-child {
+              margin-right: 30px;
+            }
+            &.show {
+              opacity: 1;
+            }
+          }
+        }
         textarea {
           width: 500px;
           line-height: 1.25rem;
@@ -214,6 +267,137 @@
           }
           &::-webkit-scrollbar {
             display: none;
+          }
+        }
+        .button {
+          padding: 7.5px 15px;
+          img.send-button {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+
+  @media (max-width: 1350px){
+    .container {
+      .petition-container {
+        .spacing {
+          width: 30px;
+        }
+      }
+      .launch-petition {
+        .launch-container {
+          textarea {
+            width: 450px;
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 1250px) {
+    .container {
+      .petition-container {
+        margin-top: 20px;
+        flex-direction: column;
+        .options-container {
+          display: flex;
+          padding-bottom: 10px;
+        }
+        .petitioning-container {
+          width: 100%;
+          display: none;
+          &.show {
+            display: block;
+          }
+          img {
+            height: 24px;
+          }
+        }
+      }
+      .launch-petition {
+        .launch-title {
+          margin: 0;
+          margin-left: 20px;
+          margin-bottom: 20px;
+        }
+        .launch-container {
+          padding-top: 50px;
+          padding-bottom: 15px;
+          .options-container {
+            display: flex;
+          }
+          textarea {
+            width: 500px;
+            display: none;
+            &.show {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    .container {
+      .petition-container {
+        margin-top: 5px;
+        margin-bottom: 40px;
+        .options-container {
+          padding-bottom: 5px;
+          h3 {
+            font-size: 1.05rem;
+            margin-right: 10px;
+          }
+        }
+        .petitioning-container {
+          h4 {
+            margin-right: 0;
+          }
+          img {
+            height: 16px;
+          }
+        }
+      }
+      .launch-petition {
+        .launch-title {
+          margin: 0;
+          margin-left: 10px;
+          margin-bottom: 10px;
+          h3 {
+            margin-right: 30px;
+          }
+        }
+        .launch-container {
+          padding: 15px;
+          padding-top: 50px;
+          border-radius: 5px;
+          &::before {
+            display: none !important;
+          }
+          .options-container {
+            padding: 0px 15px;
+            h4 {
+              &:first-child {
+                margin-right: 20px;
+              }
+            }
+          }
+          textarea {
+            width: 100%;
+          }
+          .button {
+            padding: 0;
+            border: none;
+            position: absolute;
+            right: -45px;
+            h4, img {
+              display: none;
+            }
+            img.send-button {
+              display: block;
+            }
           }
         }
       }

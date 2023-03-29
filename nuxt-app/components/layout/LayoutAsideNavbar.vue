@@ -36,51 +36,50 @@
 </template>
 
 <style scoped lang="scss">
-.aside-navbar {
-  margin-bottom: 0;
-  h4 {
-    font-size: 1.05rem;
-    font-weight: normal;
-    letter-spacing: 0.5px;
-  }
-  .links {
-    padding-bottom: 5px;
-    border-bottom: 2px dashed var(--theme-black);
-    .link {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-      img {
-        margin-right: 10px;
-      }
-    }
-  }
-  .top-keywords {
-    margin-top: 20px;
+  .aside-navbar {
+    margin-bottom: 0;
     h4 {
-      font-weight: bold;
-      font-size: 1.25rem;
-      margin-bottom: 15px;
+      font-size: 1.05rem;
+      font-weight: normal;
+      letter-spacing: 0.5px;
     }
-    ul.keywords {
-      display: flex;
-      flex-wrap: wrap;
-      li.keyword {
-        --border-offset: 2px;
-        --border-minus-offset: -3px;
-        --border-hover-translate: 5px;
-        margin-right: 10px;
-        margin-bottom: 10px;
-        padding: 1px 10px;
-        padding-bottom: 3px;
-        border: 2px solid var(--theme-black);
-        border-radius: 5px;
-        background-color: var(--theme-white);
-        cursor: pointer;
-        user-select: none;
+    .links {
+      padding-bottom: 5px;
+      border-bottom: 2px dashed var(--theme-black);
+      .link {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        img {
+          margin-right: 10px;
+        }
+      }
+    }
+    .top-keywords {
+      margin-top: 20px;
+      h4 {
+        font-weight: bold;
+        font-size: 1.25rem;
+        margin-bottom: 15px;
+      }
+      ul.keywords {
+        display: flex;
+        flex-wrap: wrap;
+        li.keyword {
+          --border-offset: 2px;
+          --border-minus-offset: -3px;
+          --border-hover-translate: 5px;
+          margin-right: 10px;
+          margin-bottom: 10px;
+          padding: 1px 10px;
+          padding-bottom: 3px;
+          border: 2px solid var(--theme-black);
+          border-radius: 5px;
+          background-color: var(--theme-white);
+          cursor: pointer;
+          user-select: none;
+        }
       }
     }
   }
-}
-
 </style>

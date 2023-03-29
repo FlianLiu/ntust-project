@@ -65,7 +65,7 @@
   <div class="petitioning-container">
     <h3>{{ listTitle }}</h3>
     <div class="petitioning-boards" :class="[{'border': containerBorder}]">
-      <ul>
+      <ul :class="{'list-has-border': listBorder}">
         <li v-if="list.length == 0" class="isNull"><h3>暫無資料</h3></li>
         <li v-for="(board, index) in list" :data-board-id="board['board-id']" :key="board['board-id']" :class="[{'border': listBorder}]">
           <div class="signing-progress-bar" v-if="progressBar && board['number-of-signers'] !== undefined">
@@ -271,4 +271,100 @@
       }
     }
   }
+
+
+  @media (max-width: 1350px){
+
+  }
+  @media (max-width: 1250px) {
+    .petitioning-container {
+      h3 {
+        display: none;
+      }
+      .petitioning-boards {
+        margin-top: 20px;
+        ul {
+          height: 300px !important;
+          &.list-has-border {
+            height: 400px !important;
+          }
+          li {
+            .infos-container {
+              .title {
+                width: 400px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    .petitioning-container {
+      .petitioning-boards {
+        margin-top: 10px;
+        &::before {
+          display: none;
+        }
+        &::after {
+          top: 0 !important;
+          left: 0 !important;
+          width: calc(100% - 25px) !important;
+        }
+        ul {
+          height: 215px !important;
+          padding-right: 15px;
+          &.list-has-border {
+            height: 325px !important;
+          }
+          li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .infos-container {
+              height: 40px;
+              padding: 0;
+              padding-right: 10px;
+              .icon {
+                width: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+              .title {
+                width: 175px;
+                padding: 0;
+              }
+              .button {
+                width: 90px;
+                height: 30px;
+                padding: 0 2px;
+                border-radius: 3px;
+                border: 2px solid var(--theme-black);
+              }
+            }
+            &.border {
+              height: 65px;
+              flex-direction: column;
+              margin-bottom: 10px;
+              border-radius: 3px;
+              &::before {
+                display: none;
+              }
+              .infos-container {
+                padding: 0 15px;
+              }
+            }
+          }
+        }
+        &.border {
+          ul li {
+            height: 50px;
+          }
+        }
+      }
+
+    }
+  }
+
 </style>

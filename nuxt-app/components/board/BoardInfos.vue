@@ -40,7 +40,11 @@
     numberOfLike: {
       type: Number,
       default: 0
-    }
+    },
+    imageCloud: {
+      type: String,
+      default: ''
+    },
   });
 
   const isUserLike = ref(data.isUserLike);
@@ -115,6 +119,7 @@
       </div>
       <img src="/share.png" height="24" alt="">
     </div>
+    <img :src="`${baseAPI}${data.imageCloud}`" height="150" alt="" class="image-cloud">
   </div>
 </template>
 
@@ -124,9 +129,6 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    img {
-      cursor: pointer;
-    }
     > * {
       margin-bottom: 15px;
     }
@@ -136,7 +138,7 @@
       text-decoration: underline;
     }
     h1 {
-      font-size: 2.5rem;
+      font-size: 2.25rem;
     }
     ul.tags {
       display: flex;
@@ -202,6 +204,7 @@
       align-items: center;
       > * {
         margin-right: 15px;
+        cursor: pointer;
       }
       .like-container, .collect-container {
         display: flex;
@@ -211,6 +214,54 @@
       .like-container img {
         margin-top: 3px;
         margin-right: 7px;
+      }
+    }
+    img.image-cloud {
+      display: none;
+      position: absolute;
+      right: 50px;
+      top: 30px;
+    }
+  }
+
+
+  @media (max-width: 1350px){
+
+  }
+  @media (max-width: 1250px) {
+    .board-infos-container {
+      margin-bottom: 30px;
+      > * {
+        max-width: 500px;
+      }
+      img.image-cloud {
+        display: block;
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    .board-infos-container {
+      > * {
+        max-width: 225px;
+        margin-bottom: 10px;
+      }
+      h1 {
+        font-size: 1.75rem;
+      }
+      .links-container {
+        ul.links {
+          padding-left: 10px;
+        }
+      }
+      .user-controls {
+        margin-bottom: 0;
+        img {
+          height: 20px;
+        }
+      }
+      img.image-cloud {
+        height: 120px;
+        right: 0;
       }
     }
   }

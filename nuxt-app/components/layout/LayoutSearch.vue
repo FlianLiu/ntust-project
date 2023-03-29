@@ -52,27 +52,28 @@
     if (route.path !== '/register') setPreviousPage(route.path);
   }
 
+  // RWD events
+  const showLinks = ref(false);
 </script>
 
 <template>
   <nav>
     <div class="container">
       <NuxtLink to="/" @click="resetSearchBar">
-        <h3>時事辯論分析平台</h3>
+        <h3>隧道肆月</h3>
       </NuxtLink>
-      <div class="search-container">
+      <div class="search-container" :class="{'showLinks': showLinks}">
         <div class="search-bar">
           <div class="img-container" @click="searchKeywords">
             <img src="/search.png" alt="" height="28">
           </div>
-          <input type="text" placeholder="搜尋您感興趣的關鍵詞..." v-model="searchBar" @keydown.enter="searchKeywords">
+          <input type="text" placeholder="搜尋您感興趣的關鍵詞" v-model="searchBar" @keydown.enter="searchKeywords">
         </div>
       </div>
-      <div class="infos">
+      <div class="infos" :class="{'showLinks': showLinks}">
         <NuxtLink to="/petition">
           <h4>連署開版</h4>
         </NuxtLink>
-
         <template v-if="showLogoutBtn">
           <NuxtLink to="/">
             <h4 @click="resetState">登出</h4>
@@ -94,6 +95,11 @@
             <h4>登入</h4>
           </NuxtLink>
         </template>
+      </div>
+      <div class="burger" :class="{'showLinks': showLinks}" @click="showLinks = !showLinks">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
       </div>
     </div>
   </nav>
@@ -139,6 +145,13 @@
           left: 5px;
           top: 4px;
         }
+        &.showLinks {
+          width: auto;
+          height: 45px;
+          &::before, .search-bar {
+            display: none;
+          }
+        }
         .search-bar {
           height: 45px;
           width: 100%;
@@ -177,6 +190,15 @@
         justify-content: flex-end;
         align-self: flex-end;
         margin-bottom: 0;
+        &.showLinks {
+          width: 500px;
+          height: 45px;
+          display: flex;
+          a {
+            padding: 5px 15px;
+            min-width: 30px;
+          }
+        }
         img {
           width: 40px;
         }
@@ -191,6 +213,140 @@
           letter-spacing: 0.5px;
         }
       }
+      .burger {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        display: none;
+        cursor: pointer;
+        .line {
+          width: 35px;
+          height: 4px;
+          background-color: var(--theme-black);
+          border-radius: 2px;
+          margin: 3px 0;
+        }
+        &.showLinks {
+          .line {
+            position: absolute;
+            &:nth-child(1) {
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -5px) rotate(45deg);
+            }
+            &:nth-child(2) {
+              width: 0;
+            }
+            &:nth-child(3) {
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -5px) rotate(-45deg);
+            }
+          }
+        }
+      }
     }
+  }
+
+  @media (max-width: 1350px){
+    nav .container {
+      > a {
+        width: 250px;
+      }
+      .infos {
+        width: 250px;
+      }
+    }
+  }
+  @media (max-width: 1250px) {
+    nav .container {
+      justify-content: space-between;
+      padding: 15px 0;
+      > a {
+        width: auto;
+      }
+      .search-container {
+        width: 400px;
+      }
+      .burger {
+        display: flex;
+      }
+      .infos {
+        display: none;
+        position: absolute;
+        right: 50px;
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    nav .container {
+      padding: 5px 0;
+      height: 40px;
+      h3 {
+        font-size: 18px;
+      }
+      .search-container {
+        position: absolute;
+        right: 40px;
+        width: 200px;
+        &::before {
+          display: none;
+        }
+        &.showLinks {
+          height: 16px;
+        }
+        .search-bar {
+          height: 16px;
+          flex-direction: row-reverse;
+          border: none;
+          .img-container {
+            padding-right: 0;
+            img {
+              height: 16px;
+            }
+          }
+          input {
+            text-align: right;
+          }
+        }
+      }
+      .burger {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        &.showLinks {
+          .line {
+            &:nth-child(1) {
+              transform: translate(-50%, -2px) rotate(45deg);
+            }
+            &:nth-child(3) {
+              transform: translate(-50%, -2px) rotate(-45deg);
+            }
+          }
+        }
+        .line {
+          width: 16px;
+          height: 2px;
+          margin: 1px 0;
+        }
+      }
+      .infos.showLinks {
+        height: 16px;
+        width: auto;
+        position: absolute;
+        top: 13px;
+        right: 35px;
+        a {
+          padding: 0 7px;
+          img {
+            height: 24px;
+            width: auto;
+          }
+        }
+      }
+    }
+    
   }
 </style>

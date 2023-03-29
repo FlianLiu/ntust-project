@@ -1,4 +1,10 @@
 <script setup>
+useHead({
+  htmlAttrs: {
+    lang: 'zh-TW',
+  },
+  title: '隧道四月-時事辯論分析平台'
+})
 </script>
 <template>
   <NuxtPage />
@@ -24,6 +30,7 @@
     font-size: 16px;
     color: var(--theme-black);
     background-color:  var(--theme-white);
+    scroll-behavior: smooth;
   }
   body, #__nuxt {
     width: 100%;
@@ -61,5 +68,40 @@
   .double-solid-border:hover {
     box-shadow: var(--border-hover-translate) var(--border-hover-translate) 0px var(--double-border-black);
     transform: translate(var(--border-minus-offset), var(--border-minus-offset));
+  }
+
+  @media (max-width: 1350px){
+    .container {
+      max-width: 1200px;
+    }
+  }
+  @media (max-width: 1250px) {
+    #__nuxt {
+      padding-top: 70px;
+    }
+    html {
+      font-size: 14px;
+    }
+    .container {
+      max-width: 760px;
+    }
+    .double-solid-border {
+      box-shadow: none !important;
+    }
+    .double-solid-border:hover {
+      box-shadow: none !important;
+      transform: translate(0, 0);
+    }
+  }
+  @media (max-width: 800px) {
+    html {
+      font-size: 12px;
+    }
+    #__nuxt {
+      padding-top: 40px;
+    }
+    .container {
+      max-width: 375px;
+    }
   }
 </style>

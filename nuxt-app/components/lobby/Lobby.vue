@@ -59,4 +59,32 @@
       width: 1020px;
     }
   }
+
+  @media (max-width: 1350px){
+    .container {
+      main {
+        margin-top: 20px;
+        margin-left: 250px;
+      }
+    }
+  }
+  @media (max-width: 1250px) {
+    .container {
+      .aside {
+        display: none;
+      }
+      main {
+        width: 760px;
+        margin-left: 0;
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    .container {
+      main {
+        margin-top: 5px;
+        width: 375px;
+      }
+    }
+  }
 </style>

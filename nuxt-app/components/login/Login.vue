@@ -227,4 +227,63 @@
       }
     }
   }
+
+  @media (max-width: 1350px){
+    
+  }
+  @media (max-width: 1250px) {
+    .login-container {
+      min-height: calc(100vh - 80px);
+      padding: 0;
+      form {
+        border: 3px solid var(--theme-black);
+        &:hover {
+          transform: scale(1);
+          box-shadow: 0 0 0 var(--shadow-black);
+        }
+      }
+    }
+  }
+  @media (max-width: 800px) {
+    .login-container {
+      min-height: calc(100vh - 50px);
+      padding: 0;
+      form {
+        width: 375px;
+        > * {
+          margin: 10px 0;
+        }
+        .icon-container {
+          > img {
+            height: 50px;
+          }
+          .icons {
+            > img {
+              height: 12px;
+            }
+          }
+        }
+        input#email, .password-container {
+          margin: 5px 0;
+        }
+        .password-container {
+          img {
+            opacity: 1 !important;
+          }
+        }
+        input {
+          &#email , &#password {
+            &:focus, &:valid, &:invalid {
+              border: 3px solid var(--theme-black);
+              width: 325px;
+            }
+            border: 3px solid var(--theme-black);
+            width: 325px;
+          }
+        }
+      }
+    }
+  }
+
+
 </style>
