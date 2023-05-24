@@ -137,7 +137,7 @@
     <vue-word-cloud
         class="image-cloud"
         style="height: 150px; width: 150px;"
-        :words="imageWordCloud"
+        :words="imageWordCloud.slice(0,17)"
         color="#333333"
         :animation-duration="0"
         :spacing="0.2"

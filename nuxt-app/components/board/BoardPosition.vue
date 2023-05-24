@@ -5,7 +5,7 @@
   const { searchTag } = useSearchBar();
   const { baseAPI, userToken, userId, userName } = useAuthStore();
 
-  const { positions } = defineProps({
+  const { positions, tags, id } = defineProps({
     positions: {
       type: Array[Object],
       default: [{
@@ -26,97 +26,41 @@
           }
         ]
       }]
-    }
+    },
+    tags: {
+      type: Array,
+      default: ['tag']
+    },
+    id: {
+      type: String,
+      default: 'board-id'
+    },
   });
   const suggestBoards = reactive({
-    'data': [
-      {
-        'board-id': 'board-id-1',
-        'number-of-like': 573,
-        'date': '2022-10-27',
-        'title': '早餐應該要吃中式還是西式?',
-        'tags': ['早餐', '中式', '西式',],
-        'keyworks-with-count': [
-          {
-            'keyword': '蛋餅',
-            'count': 58,
-          },
-          {
-            'keyword': '漢堡',
-            'count': 52,
-          },
-          {
-            'keyword': '饅頭',
-            'count': 47,
-          },
-        ]
-      },{
-        'board-id': 'board-id-2',
-        'number-of-like': 489,
-        'date': '2022-11-12',
-        'title': '今年天氣是不是比較冷啊?',
-        'tags': ['氣候', '全球暖化'],
-        'keyworks-with-count': [
-          {
-            'keyword': '好冷',
-            'count': 75,
-          },
-          {
-            'keyword': '電暖器',
-            'count': 57,
-          },
-          {
-            'keyword': '冰棒',
-            'count': 32,
-          },
-        ]
-      },{
-        'board-id': 'board-id-3',
-        'number-of-like': 315,
-        'date': '2022-12-25',
-        'title': '聖誕節還是一個人過該怎麼辦?',
-        'tags': ['魯蛇', '聖誕節', '伴侶', '女朋友'],
-        'keyworks-with-count': [
-          {
-            'keyword': '魯蛇',
-            'count': 87,
-          },
-          {
-            'keyword': '笑死',
-            'count': 45,
-          },
-          {
-            'keyword': '可悲',
-            'count': 32,
-          },
-        ]
-      },{
-        'board-id': 'board-id-4',
-        'number-of-like': 279,
-        'date': '2023-1-1',
-        'title': '今年的元旦依舊在家睡到飽，真的有人會去參加元旦升旗典禮嗎?',
-        'tags': ['升旗', '元旦', '睡飽', '跨年'],
-        'keyworks-with-count': [
-          {
-            'keyword': '升旗',
-            'count': 87,
-          },
-          {
-            'keyword': '元旦',
-            'count': 45,
-          },
-          {
-            'keyword': '睡飽',
-            'count': 32,
-          },
-          {
-            'keyword': '跨年',
-            'count': 25,
-          },
-        ]
-      }
-    ]
+    data: [],
   });
+
+  async function fetchSuggestBoards() {
+    let searchKeyword = '';
+    tags.forEach((tag, index) => {
+      searchKeyword += `${tag['tag-name']}`;
+      if (index !== tags.length-1) searchKeyword += ' ';
+    })
+    const { data:res } = await useFetch(`${baseAPI}/board/post-search-board`, {
+      method: 'POST',
+      body: {
+        "keyword": searchKeyword
+      }
+    });
+    suggestBoards['data'] = res.value.data;
+    // remove duplicate
+    suggestBoards['data'].slice(0, 5).forEach((board, index)=> {
+      if (board['id'] === id) {
+        suggestBoards['data'] = suggestBoards['data'].slice(0, index).concat(suggestBoards['data'].slice(index+1,))
+      }
+    });
+  }
+  fetchSuggestBoards()
 
   const selectedPostion = ref(0);
   const userCommented = ref('')
@@ -237,13 +181,14 @@
         <div class="suggest-boards">
           <h3>更多類似看板：</h3>
           <ul>
+            <h4 v-if="suggestBoards.data.length === 0">暫無推薦看板</h4>
             <template v-for="(board, index) in suggestBoards.data" >
-              <NuxtLink :to="'/board/'+ board['board-id']" v-if="index <= 3">
+              <NuxtLink :to="'/board/'+ board['id']" v-if="index <= 3">
                 <li>
                   <div class="infos">
                     <h5 class="date">{{ convertDate(board.date) }}</h5>
                     <ul>
-                      <li v-for="tag in board.tags" @click.prevent="searchTag(tag)">#{{ tag }}</li>
+                      <li v-for="tag in board.tags" @click.prevent="searchTag(tag['tag-name'])">#{{ tag['tag-name'] }}</li>
                     </ul>
                   </div>
                   <h3 class="title">{{ board.title }}</h3>

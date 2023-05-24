@@ -1,5 +1,4 @@
 <script setup>
-  import { useSearchBar } from '@/composables/searchBar.js';
   import { useAuthStore } from '~~/stores/authorization';
   import { useSearchResultStore } from '~~/stores/searchResult';
   const { baseAPI, userId, state, userHeadShotNumber, resetState, setPreviousPage } = useAuthStore();
@@ -25,7 +24,6 @@
   }
   fetchTopKeywordData();
 
-  const { searchTag } = useSearchBar();
   const searchBar = useState('search-bar', ()=> '');
   const route = useRoute();
   const fetchData = inject('fetchData');
@@ -39,9 +37,10 @@
   }
   function searchKeywords() {
     setSearchKeyword(searchBar.value);
-    if (searchBar.value === '') return;
     if (route.fullPath === '/') {
       fetchData();
+    }else if(searchBar.value === '') {
+      return
     }else {
       navigateTo('/');
     }

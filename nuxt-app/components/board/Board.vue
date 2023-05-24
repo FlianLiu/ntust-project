@@ -91,6 +91,8 @@
     />
     <BoardPosition 
       :positions="data.positions"
+      :tags="data.tags"
+      :id="data.id"
     />
   </div>
 </template>

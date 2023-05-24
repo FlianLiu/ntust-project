@@ -94,11 +94,12 @@
 <template>
   <div class="keyword-analysis-container">
     <div class="keyword-analysis">
-      <Pie class="pie" :data="pieData" :options="pieOptions" />
+      <Pie class="pie" :data="pieData" :options="pieOptions" 
+        :class="{'show': !switchGraphState}"
+      />
       <vue-word-cloud
         class="image-cloud"
         style="height: 230px; width: 300px;"
-        :class="{'show': !switchGraph}, {'show-analyze': switchGraph}"
         :words="imageWordCloud"
         color="#333333"
         :animation-duration="0"
@@ -214,7 +215,12 @@
   @media (max-width: 1250px) {
     .keyword-analysis-container {
       .keyword-analysis {
-        
+        .pie {
+          display: none !important;
+          &.show {
+            display: block !important;
+          }
+        }
         .image-cloud {
           display: none;
         }

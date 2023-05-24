@@ -83,7 +83,7 @@
         class="image-cloud"
         style="height: 110px; weight: 150px"
         :class="{'show': !switchGraph}, {'show-analyze': switchGraph}"
-        :words="imageWordCloud"
+        :words="imageWordCloud.slice(0,17)"
         color="#333333"
         :animation-duration="0"
         :spacing="0.2"
