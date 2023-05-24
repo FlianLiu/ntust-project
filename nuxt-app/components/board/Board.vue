@@ -31,10 +31,6 @@
       type: Boolean,
       default: false
     },
-    imageCloud: {
-      type: String,
-      default: '/image-cloud.png'
-    },
     numberOfLike: {
       type: Number,
       default: 0
@@ -87,10 +83,10 @@
       :isUserCollected="data.isUserCollected"
       :isUserLike="data.isUserLike"
       :numberOfLike="data.numberOfLike"
-      :imageCloud="data.imageCloud"
+      :keywordsWithCount="data.keywordsWithCount"
     />
-    <BoardAnalysis 
-      :imageCloud="data.imageCloud"
+    <BoardAnalysis
+      :positions="data.positions"
       :keywordsWithCount="data.keywordsWithCount"
     />
     <BoardPosition 
@@ -120,8 +116,8 @@
   @media (max-width: 1250px) {
     .container {
       padding-top: 20px;
-      .board-infos-container {
-
+      > * {
+        margin-bottom: 30px;
       }
     }
   }

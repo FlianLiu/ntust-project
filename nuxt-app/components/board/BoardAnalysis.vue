@@ -1,20 +1,66 @@
 <script setup>
-  import { useAuthStore } from '~~/stores/authorization';
-  const { baseAPI } = useAuthStore();
-  const data = defineProps({
-    imageCloud: {
-      type: String,
-      default: ''
-    },
+  import VueWordCloud from 'vuewordcloud';
+  import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+  import { Pie } from 'vue-chartjs';
+
+  const { keywordsWithCount, positions } = defineProps({
     keywordsWithCount: {
       type: Array[Object],
       default: [{
-        'keyword': 'keyword',
+        'keyword': '',
         'count': 0,
       },]
     },
-
+    positions: {
+      type: Array[Object],
+      default: [{
+        'position-name': '',
+        'position-id': '',
+        'position-count': 0,
+        'comments': [
+          {
+            'comment-id': '',
+            'commented-user-id': '',
+            'commented-user-name': '',
+            'commented-user-headshot-number': 0,
+            'commented-date': '',
+            'is-user-liked': false,
+            'is-user-reported': false,
+            'number-of-liker': 0,
+            'content': ''
+          }
+        ]
+      }]
+    }
   });
+
+  ChartJS.register(ArcElement, Tooltip, Legend)
+  function generateColor(arr) {
+    let colorArray = [];
+    const offset = 50;
+    const delta = (255 - offset) / arr.length; 
+    for (let i =0; i<arr.length; i++) {
+      const newColor = (delta * i + offset);
+      colorArray[i] = `rgb(${newColor}, ${newColor}, ${newColor})`;
+    }
+    return colorArray;
+  }
+  const sortedByPositionCount = computed(
+    ()=> positions.sort((a, b)=> b['position-count'] - a['position-count'])
+  );
+  const pieData = {
+    labels: sortedByPositionCount.value.map((el)=> el['position-name']),
+    datasets: [
+      {
+        backgroundColor: generateColor(positions),
+        data: sortedByPositionCount.value.map((el)=> el['position-count'])
+      }
+    ]
+  }
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false
+  }
 
   function calculateMaxKeywordCount(keywords) {
     let max = 0;
@@ -23,6 +69,12 @@
     }
     return max;
   }
+  function sortWithCount(keywords) {
+    return keywords.sort((a, b)=> b.count - a.count);
+  }
+  const imageWordCloud = sortWithCount(keywordsWithCount).map((el)=> {
+    return [ el.keyword, el.count ];
+  });
 
   onMounted(()=> {
     const keywordElements = document.querySelectorAll('.keyword-bar-container .keyword-bar');
@@ -42,27 +94,22 @@
 <template>
   <div class="keyword-analysis-container">
     <div class="keyword-analysis">
-      <div class="entire-keyword-with-count-container" :class="{'show': !switchGraphState}">
-        <div class="entire-keyword-with-count">
-          <div>
-            <h4>關鍵詞</h4>
-            <h4>次數</h4>
-          </div>
-          <ul>
-            <li v-for="keywordObject in data.keywordsWithCount">
-              <h4>{{ keywordObject.keyword }}</h4>
-              <h4>{{ keywordObject.count }}</h4>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <img :src="`${baseAPI}${data.imageCloud}`" height="300" alt="" class="image-cloud">
+      <Pie class="pie" :data="pieData" :options="pieOptions" />
+      <vue-word-cloud
+        class="image-cloud"
+        style="height: 230px; width: 300px;"
+        :class="{'show': !switchGraph}, {'show-analyze': switchGraph}"
+        :words="imageWordCloud"
+        color="#333333"
+        :animation-duration="0"
+        :spacing="0.2"
+      />
       <div class="keyword-bar-chart" :class="{'show': switchGraphState}">
-        <template v-for="(keywordObject, index) in data.keywordsWithCount">
+        <template v-for="(keywordObject, index) in keywordsWithCount">
           <div class="keyword" v-if="index <= 4">
             <div class="keyword-bar-container">
               <div class="keyword-bar" 
-                :data-max-count = "calculateMaxKeywordCount(data.keywordsWithCount)"
+                :data-max-count = "calculateMaxKeywordCount(keywordsWithCount)"
                 :data-count="keywordObject.count"
               >{{ keywordObject.keyword }}</div>
             </div>
@@ -103,50 +150,14 @@
       > * {
         height: 230px;
       }
-      .entire-keyword-with-count-container {
-        &::before {
-          content: '';
-          display: block;
-          position: absolute;
-          left: 5px;
-          top: 5px;
-          width: 100%;
-          height: calc(100% + 3px);
-          border: 3px solid var(--theme-black);
-          border-radius: 7px;
-        }
-        .entire-keyword-with-count {
-          width: 250px;
-          border: 3px solid var(--theme-black);
-          border-radius: 5px;
-          overflow: hidden;
-          background-color: var(--theme-white);
-          > div {
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            padding: 5px 0;
-            padding-right: 13px;
-            background-color: var(--theme-white);
-            border-bottom: 3px solid #000;
-            position: absolute;
-            top: 0;
-            z-index: 1;
-          }
-          h4 {
-            width: 50%;
-            text-align: center;
-          }
-          ul {
-            height: 195px;
-            overflow-y: scroll;
-            margin-top: 31.6px;
-            li {
-              display: flex;
-              margin: 15px 0;
-            }
-          }
-        }
+      .pie {
+        max-height: 230px;
+        max-width: 300px;
+      }
+      
+      .image-cloud {
+        max-height: 230px;
+        max-width: 250px;
       }
       .keyword-bar-chart {
         padding-right: 50px;
@@ -203,17 +214,8 @@
   @media (max-width: 1250px) {
     .keyword-analysis-container {
       .keyword-analysis {
-        .entire-keyword-with-count-container {
-          &::before {
-            display: none;
-          }
-          .entire-keyword-with-count {
-            ul {
-              margin-top: 30px;
-            }
-          }
-        }
-        img.image-cloud {
+        
+        .image-cloud {
           display: none;
         }
         .keyword-bar-chart {
@@ -242,21 +244,11 @@
           &.show {
             display: flex !important;
           }
-        }
-        .entire-keyword-with-count-container {
-          height: 200px;
-          > div {
-            height: 200px;
-          }
-          .entire-keyword-with-count {
-            width: 300px;
-            font-size: 14px;
-            ul {
-              height: calc(100% - 30px);
-              margin-top: 29px;
-            }
+          &.image-cloud.show {
+            display: none !important;
           }
         }
+        
         .keyword-bar-chart {
           height: 200px;
         }

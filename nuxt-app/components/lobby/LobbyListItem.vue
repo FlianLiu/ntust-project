@@ -1,48 +1,35 @@
 <script setup>
   import { useSearchBar } from '@/composables/searchBar.js';
-  import { useAuthStore } from '~~/stores/authorization';
+  import VueWordCloud from 'vuewordcloud';
   const { searchTag } = useSearchBar();
-  const { baseAPI } = useAuthStore(); 
 
-  const { id, numberOfLike, date, title, tags, imageCloud, keywordWithCount } = defineProps({
+  const { id, numberOfLike, date, title, tags, keywordWithCount } = defineProps({
     id: {
       type: String,
       default: ''
     },
     numberOfLike: {
       type: Number,
-      default: 573,
+      default: 0,
     },
     date: {
       type: String,
-      default: '2022-10-27'
+      default: '0000-00-00'
     },
     title: {
       type: String,
-      default: '看板標題 default title'
+      default: ''
     },
     tags: {
       type: Array,
-      default: ['標籤','標籤','標籤']
-    },
-    imageCloud: {
-      type: String,
-      default: '/image-cloud.png'
+      default: []
     },
     keywordWithCount: {
       type: Array,
       default: [
         {
-					keyword: '關鍵詞1',
-					count: 58,
-				},
-        {
-					keyword: '關鍵詞2',
-					count: 52,
-				},
-        {
-					keyword: '關鍵詞3',
-					count: 47,
+					keyword: '',
+					count: 0,
 				},
       ]
     }
@@ -58,6 +45,12 @@
     }
     return max;
   }
+  function sortWithCount(keywords) {
+    return keywords.sort((a, b)=> b.count - a.count);
+  }
+  const imageWordCloud = sortWithCount(keywordWithCount).map((el)=> {
+    return [ el.keyword, el.count ];
+  });
 
   // RWD event
   const switchGraph = ref(false);
@@ -81,9 +74,17 @@
           </li>
         </ul>
       </div>
-      <img :src="`${baseAPI}${imageCloud}`" alt="" height="110" class="image-cloud" :class="{'show': !switchGraph}, {'show-analyze': switchGraph}">
+      <vue-word-cloud
+        class="image-cloud"
+        style="height: 110px; weight: 150px"
+        :class="{'show': !switchGraph}, {'show-analyze': switchGraph}"
+        :words="imageWordCloud"
+        color="#333333"
+        :animation-duration="0"
+        :spacing="0.2"
+      />
       <div class="keywords" :class="{'show': switchGraph}, {'show-analyze': switchGraph}">
-        <div class="keyword" v-for="keywordObject in keywordWithCount.sort().slice(0,3)">
+        <div class="keyword" v-for="keywordObject in sortWithCount(keywordWithCount).slice(0,3)">
           <span>{{ keywordObject.keyword }}</span>
           <div class="keyword-bar" 
             :data-max-count = "calculateMaxKeywordCount(keywordWithCount)"
@@ -131,6 +132,10 @@
       cursor: default;
       .keywords {
         display: none;
+      }
+      .image-cloud {
+        max-height: 110px;
+        max-width: 150px;
       }
       .board-title-container {
         .board-info {
@@ -301,7 +306,7 @@
         .switch-button-container {
           display: flex;
         }
-        img.image-cloud {
+        .image-cloud {
           display: none;
           &.show {
             display: block;
@@ -342,10 +347,10 @@
         border-radius: 5px;
         padding: 10px 20px;
         padding-right: 30px;
-        img.image-cloud {
-          height: 90px;
+        .image-cloud {
+          max-height: 90px;
         }
-        .board-title-container, img.image-cloud {
+        .board-title-container, .image-cloud {
           display: none;
           &.show {
             display: none;

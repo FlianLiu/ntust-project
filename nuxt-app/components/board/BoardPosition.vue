@@ -9,19 +9,20 @@
     positions: {
       type: Array[Object],
       default: [{
-        'position-name': 'position',
-        'position-id': 'position-uuid',
+        'position-name': '',
+        'position-id': '',
+        'position-count': 0,
         'comments': [
           {
-            'comment-id': 'comment-uuid',
-            'commented-user-id': 'user-uuid',
-            'commented-user-name': 'user name',
+            'comment-id': '',
+            'commented-user-id': '',
+            'commented-user-name': '',
             'commented-user-headshot-number': 0,
-            'commented-date': 'commented date',
+            'commented-date': '',
             'is-user-liked': false,
             'is-user-reported': false,
             'number-of-liker': 0,
-            'content': 'comments'
+            'content': ''
           }
         ]
       }]
@@ -35,7 +36,6 @@
         'date': '2022-10-27',
         'title': '早餐應該要吃中式還是西式?',
         'tags': ['早餐', '中式', '西式',],
-        'image-cloud': '/image-cloud.png',
         'keyworks-with-count': [
           {
             'keyword': '蛋餅',
@@ -56,7 +56,6 @@
         'date': '2022-11-12',
         'title': '今年天氣是不是比較冷啊?',
         'tags': ['氣候', '全球暖化'],
-        'image-cloud': '/image-cloud.png',
         'keyworks-with-count': [
           {
             'keyword': '好冷',
@@ -77,7 +76,6 @@
         'date': '2022-12-25',
         'title': '聖誕節還是一個人過該怎麼辦?',
         'tags': ['魯蛇', '聖誕節', '伴侶', '女朋友'],
-        'image-cloud': '/image-cloud.png',
         'keyworks-with-count': [
           {
             'keyword': '魯蛇',
@@ -98,7 +96,6 @@
         'date': '2023-1-1',
         'title': '今年的元旦依舊在家睡到飽，真的有人會去參加元旦升旗典禮嗎?',
         'tags': ['升旗', '元旦', '睡飽', '跨年'],
-        'image-cloud': '/image-cloud.png',
         'keyworks-with-count': [
           {
             'keyword': '升旗',

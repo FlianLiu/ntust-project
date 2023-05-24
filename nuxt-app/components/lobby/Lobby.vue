@@ -39,7 +39,6 @@
         :date="board.date"
         :title="board.title"
         :tags="board.tags"
-        :imageCloud="board['image-cloud']"
         :keywordWithCount="board['keywords-with-count']"
       />
     </main>

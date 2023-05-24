@@ -1,4 +1,5 @@
 <script setup>
+  import VueWordCloud from 'vuewordcloud';
   import { useSearchBar } from '@/composables/searchBar.js';
   import { useAuthStore } from '~~/stores/authorization';
   import { useCollectedBoard } from '~~/composables/userCollectedBoard';
@@ -41,9 +42,12 @@
       type: Number,
       default: 0
     },
-    imageCloud: {
-      type: String,
-      default: ''
+    keywordsWithCount: {
+      type: Array[Object],
+      default: [{
+        'keyword': '',
+        'count': 0,
+      },]
     },
   });
 
@@ -84,6 +88,12 @@
 
   const isShowLink = ref(false);
 
+  function sortWithCount(keywords) {
+    return keywords.sort((a, b)=> b.count - a.count);
+  }
+  const imageWordCloud = sortWithCount(data.keywordsWithCount).map((el)=> {
+    return [ el.keyword, el.count ];
+  });
 </script>
 
 <template>
@@ -119,7 +129,14 @@
       </div>
       <img src="/share.png" height="24" alt="">
     </div>
-    <img :src="`${baseAPI}${data.imageCloud}`" height="150" alt="" class="image-cloud">
+    <vue-word-cloud
+        class="image-cloud"
+        style="height: 150px; width: 150px;"
+        :words="imageWordCloud"
+        color="#333333"
+        :animation-duration="0"
+        :spacing="0.2"
+      />
   </div>
 </template>
 
@@ -202,6 +219,7 @@
     .user-controls {
       display: flex;
       align-items: center;
+      margin-bottom: 0;
       > * {
         margin-right: 15px;
         cursor: pointer;
@@ -216,9 +234,9 @@
         margin-right: 7px;
       }
     }
-    img.image-cloud {
+    .image-cloud {
       display: none;
-      position: absolute;
+      position: absolute !important;
       right: 50px;
       top: 30px;
     }
@@ -234,7 +252,8 @@
       > * {
         max-width: 500px;
       }
-      img.image-cloud {
+      .image-cloud {
+        top: 20px;
         display: block;
       }
     }
@@ -249,8 +268,20 @@
         font-size: 1.75rem;
       }
       .links-container {
+        max-width: 100%;
+        .link-title {
+          margin-bottom: 5px;
+        }
         ul.links {
           padding-left: 10px;
+          li {
+            &:first-child {
+              margin-top: 0;
+            }
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
         }
       }
       .user-controls {
@@ -259,9 +290,12 @@
           height: 20px;
         }
       }
-      img.image-cloud {
-        height: 120px;
+      .image-cloud {
+        max-height: 120px;
+        max-width: 120px;
+        top: 0;
         right: 0;
+        margin-bottom: 0;
       }
     }
   }
