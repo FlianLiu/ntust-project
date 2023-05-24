@@ -1,10 +1,23 @@
 <script setup>
-useHead({
-  htmlAttrs: {
-    lang: 'zh-TW',
-  },
-  title: '隧道四月-時事辯論分析平台'
-})
+  import { useAuthStore } from './stores/authorization';
+  const { setState, setKeepState } = useAuthStore();
+
+  const logined = new Date(localStorage.getItem('latestLoginedTime')).getTime();
+  const nowDate = new Date().getTime();
+  const userData = localStorage.getItem('userData');
+  const keepState = localStorage.getItem('keepState')
+  if((((nowDate - logined) / (1000 * 60 * 60 * 24)) < 1) && !(userData === '' || userData === null)) {
+    const { id, name, headshot, email, password, token } = JSON.parse(userData);
+    setKeepState(keepState);
+    setState(id, name, headshot, email, password, token);
+  }
+
+  useHead({
+    htmlAttrs: {
+      lang: 'zh-TW',
+    },
+    title: '隧道四月-時事辯論分析平台'
+  });
 </script>
 <template>
   <NuxtPage />

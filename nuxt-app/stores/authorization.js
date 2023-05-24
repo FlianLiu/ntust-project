@@ -19,6 +19,8 @@ export const useAuthStore = defineStore('authorization', () => {
     userEmail.value = '';
     userToken.value = '';
     state.value = false;
+    
+    localStorage.setItem('userData', '');
   }
   function setState(id, name, headshot, email, password, token) {
     userId.value = id;
@@ -27,9 +29,17 @@ export const useAuthStore = defineStore('authorization', () => {
     userEmail.value = email;
     userPassword.value = password;
     userToken.value = token;
-
     state.value = true;
 
+    localStorage.setItem('latestLoginedTime', new Date());
+    localStorage.setItem('userData', JSON.stringify({
+      id: userId.value,
+      name: userName.value,
+      headshot: userHeadShotNumber.value,
+      email: userEmail.value,
+      password: userPassword.value,
+      token: userToken.value
+    }))
     if (keepState.value) {
       localStorage.setItem('email', userEmail.value);
       localStorage.setItem('password', userPassword.value);
