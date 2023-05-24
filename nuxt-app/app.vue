@@ -1,16 +1,10 @@
 <script setup>
   import { useAuthStore } from './stores/authorization';
-  const { setState, setKeepState } = useAuthStore();
+  const { checkState } = useAuthStore();
 
-  const logined = new Date(localStorage.getItem('latestLoginedTime')).getTime();
-  const nowDate = new Date().getTime();
-  const userData = localStorage.getItem('userData');
-  const keepState = localStorage.getItem('keepState')
-  if((((nowDate - logined) / (1000 * 60 * 60 * 24)) < 1) && !(userData === '' || userData === null)) {
-    const { id, name, headshot, email, password, token } = JSON.parse(userData);
-    setKeepState(keepState);
-    setState(id, name, headshot, email, password, token);
-  }
+  onMounted(()=> {
+    checkState();
+  })
 
   useHead({
     htmlAttrs: {

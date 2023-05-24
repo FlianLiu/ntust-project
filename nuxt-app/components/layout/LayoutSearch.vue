@@ -45,11 +45,23 @@
       navigateTo('/');
     }
   }
-  
   function toLoginPage() {
     const route = useRoute();
     if (route.path !== '/register') setPreviousPage(route.path);
   }
+
+  const userInfos = reactive({})
+  onMounted(()=> {
+    const logined = new Date(localStorage.getItem('latestLoginedTime')).getTime();
+    const nowDate = new Date().getTime();
+    const userData = localStorage.getItem('userData');
+    if ((((nowDate - logined) / (1000 * 60 * 60 * 24)) < 1) && !(userData === '' || userData === null)){
+      const { id, headshot } = JSON.parse(localStorage.getItem('userData'));
+      userInfos.state = true;
+      userInfos.userId = id;
+      userInfos.headshot = headshot;
+    }
+  })
 
   // RWD events
   const showLinks = ref(false);
@@ -83,10 +95,10 @@
             <h4>註冊</h4>
           </NuxtLink>
         </template>
-        <template v-else-if="state && userId !== ''">
-          <NuxtLink :to="'/users/'+userId">
+        <template v-else-if="userInfos.state && userInfos.userId !== ''">
+          <NuxtLink :to="'/users/'+userInfos.userId">
             <!-- user headshot -->
-            <img :src="'/rabbit-'+userHeadShotNumber+'.png'" height="40" alt="">
+            <img :src="'/rabbit-'+userInfos.headshot+'.png'" height="40" alt="">
           </NuxtLink>
         </template>
         <template v-else>

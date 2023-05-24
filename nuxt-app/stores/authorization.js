@@ -59,7 +59,17 @@ export const useAuthStore = defineStore('authorization', () => {
   function setKeepState(newState) {
     keepState.value = newState;
   }
-
+  function checkState() {
+    const logined = new Date(localStorage.getItem('latestLoginedTime')).getTime();
+    const nowDate = new Date().getTime();
+    const userData = localStorage.getItem('userData');
+    const keepState = localStorage.getItem('keepState');
+    if((((nowDate - logined) / (1000 * 60 * 60 * 24)) < 1) && !(userData === '' || userData === null)) {
+      const { id, name, headshot, email, password, token } = JSON.parse(userData);
+      setKeepState(keepState);
+      setState(id, name, headshot, email, password, token);
+    }
+  }
 
   return {
     baseAPI,
@@ -76,6 +86,7 @@ export const useAuthStore = defineStore('authorization', () => {
     switchState,
     resetState,
     setState,
+    checkState,
 
     previousPage,
     setPreviousPage,
