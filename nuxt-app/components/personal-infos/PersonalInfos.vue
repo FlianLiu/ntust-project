@@ -37,7 +37,12 @@
       }]
     }
   });
-  
+
+  function convertDate(time) {
+    const dt = new Date(time);
+    return dt.toLocaleDateString();
+  }
+
   const collectedBoardsList = reactive({});
   const collectedBoardsDelta = ref(0);
   async function collectBoard(boardId, boardTitle) {
@@ -77,7 +82,7 @@
         <div>
           <h2>{{ userName }}</h2>
           <h4>{{ userEmail }}</h4>
-          <h4>{{ userEstablishedDate }} ~</h4>
+          <h4>{{ convertDate(userEstablishedDate) }} ~</h4>
         </div>
       </div>
       <div class="user-operated-infos" :class="{'show': !personalInfoState}">

@@ -50,6 +50,11 @@
       },]
     },
   });
+  
+  const convertedDate = computed(()=> {
+    const dt = new Date(data.date);
+    return dt.toLocaleDateString();
+  })
 
   const isUserLike = ref(data.isUserLike);
   const likeCount = ref(data.numberOfLike);
@@ -98,7 +103,7 @@
 
 <template>
   <div class="board-infos-container">
-    <h5 class="date">#{{ data.date }}</h5>
+    <h5 class="date"># {{ convertedDate }}</h5>
     <h1>{{ data.title }}</h1>
     <ul class="tags">
       <li v-for="tag in data.tags" @click="searchTag(tag['tag-name'])" class="tag double-solid-border">{{ tag['tag-name'] }}</li>

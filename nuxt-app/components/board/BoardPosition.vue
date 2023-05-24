@@ -150,6 +150,15 @@
     window.alert('已送出留言!');
   }
 
+  function convertDate(time) {
+    const dt = new Date(time);
+    return dt.toLocaleDateString();
+  }
+  function convertDateMoreDetail(time) {
+    const dt = new Date(time);
+    return dt.toLocaleString();
+  }
+
   const likeCommentTrigger = inject('likeComment');
   function likeComment(index, commentId) {
     if (userId === '') {
@@ -193,7 +202,7 @@
           <li class="comment" v-for="(commentObject ,index) in positions[selectedPostion].comments">
             <img class="headshot" src="/rabbit-1.png" alt="" height="50">
             <div>
-              <h5 class="date"># {{ commentObject['commented-date'] }}</h5>
+              <h5 class="date"># {{ convertDateMoreDetail(commentObject['commented-date']) }}</h5>
               <div>
                 <h4>{{ commentObject['commented-user-name'] }}</h4>
                 <div class="like-container" @click="likeComment(index, commentObject['comment-id'])">
@@ -232,7 +241,7 @@
               <NuxtLink :to="'/board/'+ board['board-id']" v-if="index <= 3">
                 <li>
                   <div class="infos">
-                    <h5 class="date">{{ board.date }}</h5>
+                    <h5 class="date">{{ convertDate(board.date) }}</h5>
                     <ul>
                       <li v-for="tag in board.tags" @click.prevent="searchTag(tag)">#{{ tag }}</li>
                     </ul>

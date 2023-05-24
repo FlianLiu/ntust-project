@@ -38,6 +38,11 @@
   const toBoardPage = ref('');
   if (id !== '') toBoardPage.value = '/board/'+ id;
 
+  function convertDate(time) {
+    const dt = new Date(time);
+    return dt.toLocaleDateString();
+  }
+
   function calculateMaxKeywordCount(keywords) {
     let max = 0;
     for (let i=0; i<keywords.length; i++) {
@@ -65,7 +70,7 @@
         <div class="board-info">
           <img src="/polular-board-fire.png" height="20" alt="">
           <h5>{{ numberOfLike }}</h5>
-          <span class="date">#{{ date }}</span>
+          <span class="date"># {{ convertDate(date) }}</span>
         </div>
         <h3 class="title-text">{{ title }}</h3>
         <ul class="tags-container">
@@ -143,7 +148,7 @@
           align-items: center;
           font-size: 1.2rem;
           > * {
-            margin-right: 15px;
+            margin-right: 10px;
           }
           span.date {
             margin-left: 10px;
