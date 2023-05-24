@@ -39,7 +39,7 @@
       window.alert('請確實填寫每個欄位內容!!')
       return
     }
-    if (password.value !== checkPassword) {
+    if (password.value !== checkPassword.value) {
       window.alert('密碼輸入不一致，請重新輸入!')
       checkPassword.value = '';
       return
