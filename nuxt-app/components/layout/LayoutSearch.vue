@@ -71,7 +71,7 @@
   <nav>
     <div class="container">
       <NuxtLink to="/" @click="resetSearchBar">
-        <h3>隧道肆月</h3>
+        <h3>威~亂講</h3>
       </NuxtLink>
       <div class="search-container" :class="{'showLinks': showLinks}">
         <div class="search-bar">
